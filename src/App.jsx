@@ -12,7 +12,7 @@ const Particles = () => {
     // Generate random particles
     const generateParticles = () => {
       const newParticles = [];
-      for (let i = 0; i < 50; i++) {
+      for (let i = 0; i < 25; i++) {
         newParticles.push({
           id: i,
           left: Math.random() * 100,
@@ -276,34 +276,35 @@ function App() {
     let characterBottom = '0%';
 
     if (screenWidth < 768) {
-      // Mobile - small scale, low position
-      characterScale = 0.4;
-      characterBottom = '-60%';
+      // Mobile
+      characterScale = 0.7;
+      characterBottom = '-15%';
     } else if (screenWidth < 1024) {
       // Tablet
-      characterScale = 0.5;
-      characterBottom = '-70%';
+      characterScale = 0.8;
+      characterBottom = '-25%';
     } else if (screenWidth < 1280) {
       // Laptop 14"
-      characterScale = 0.6;
-      characterBottom = '-80%';
+      characterScale = 0.85;
+      characterBottom = '-45%';
     } else if (screenWidth < 1536) {
       // 1440px screens
-      characterScale = 0.7;
-      characterBottom = '-90%';
+      characterScale = 0.9;
+      characterBottom = '-50%';
     } else if (screenWidth < 2000) {
       // 1920px screens
-      characterScale = 0.9;
-      characterBottom = '-60%';
+      characterScale = 1.0;
+      characterBottom = '-50%';
     } else {
       // 2K+ monitors (2560px+)
       characterScale = 1.2;
-      characterBottom = '-30%';
+      characterBottom = '-40%';
     }
 
     gsap.to('.character', {
       scale: characterScale,
-      x: '-50%',
+      xPercent: -50,
+      left: '50%',
       bottom: characterBottom,
       rotate: 0,
       duration: 2,
@@ -473,11 +474,15 @@ function App() {
                   className='absolute sky scale-[1.5] rotate-[-20deg] top-0 left-0 w-full h-full object-cover'
                   src='./sky.png'
                   alt=''
+                  loading='eager'
+                  decoding='async'
                 />
                 <img
                   className='absolute scale-[1.8] rotate-[-3deg] bg top-0 left-0 w-full h-full object-cover'
                   src='./bg.png'
                   alt=''
+                  loading='eager'
+                  decoding='async'
                 />
                 <div className='text text-white flex flex-col gap-1 md:gap-2 lg:gap-2 xl:gap-3 absolute top-10 md:top-16 lg:top-16 xl:top-20 left-1/2 -translate-x-1/2 scale-[0.5] md:scale-[0.7] lg:scale-[0.9] xl:scale-[1.4] rotate-[-10deg]'>
                   <h1 className='text-[4rem] md:text-[6rem] lg:text-[8rem] xl:text-[12rem] leading-none -ml-10 md:-ml-16 lg:-ml-24 xl:-ml-40'>
@@ -494,6 +499,8 @@ function App() {
                   className='absolute character -bottom-[160%] left-1/2 -translate-x-1/2 scale-[2.7] rotate-[-20deg]'
                   src='./herobg.png'
                   alt=''
+                  loading='eager'
+                  decoding='async'
                 />
               </div>
               <div className='btmbar text-white absolute bottom-0 left-0 w-full py-4 md:py-8 px-4 md:px-10 bg-gradient-to-t from-black to-transparent'>
@@ -569,6 +576,8 @@ function App() {
                     className='max-w-full max-h-[350px] md:max-h-[400px] lg:max-h-[400px] xl:max-h-[500px] 2xl:max-h-[700px] object-contain transition-all duration-500 scale-100 lg:scale-100 xl:scale-105 2xl:scale-115'
                     src={CHARACTERS[activeCharacter].image}
                     alt={CHARACTERS[activeCharacter].name}
+                    loading='lazy'
+                    decoding='async'
                   />
                 </div>
                 <div className='rg order-3 lg:order-none w-full lg:w-[45%] text-center lg:text-left'>
