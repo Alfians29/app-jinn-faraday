@@ -1,0 +1,217 @@
+.characters {
+  min-height: 100vh;
+  padding: var(--space-2xl) var(--space-lg);
+  background: var(--color-bg-primary);
+  position: relative;
+}
+
+.characters__header {
+  text-align: center;
+  margin-bottom: var(--space-xl);
+}
+
+.characters__title {
+  font-size: clamp(2rem, 5vw, 4rem);
+  background: var(--gradient-sunset);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: var(--space-md);
+}
+
+.characters__subtitle {
+  color: var(--color-text-secondary);
+  font-size: 1.1rem;
+  letter-spacing: 0.1em;
+}
+
+/* Switch Buttons */
+.characters__tabs {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
+}
+
+.characters__tab {
+  padding: var(--space-md) var(--space-xl);
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  background: transparent;
+  border: 2px solid var(--color-text-muted);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.characters__tab::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--gradient-sunset);
+  transition: left var(--transition-normal);
+  z-index: -1;
+}
+
+.characters__tab:hover {
+  border-color: var(--color-sunset-orange);
+  color: var(--color-text-primary);
+}
+
+.characters__tab:hover::before {
+  left: 0;
+}
+
+.characters__tab--active {
+  border-color: var(--color-neon-pink);
+  color: var(--color-text-primary);
+  background: var(--gradient-sunset);
+  box-shadow: var(--shadow-glow-pink);
+}
+
+/* Character Card */
+.characters__card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-xl);
+  max-width: 1200px;
+  margin: 0 auto;
+  align-items: center;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+.characters__image-container {
+  position: relative;
+  aspect-ratio: 3/4;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.5),
+    0 0 40px rgba(255, 45, 149, 0.2);
+}
+
+.characters__image-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 50%,
+    rgba(10, 10, 10, 0.8) 100%
+  );
+  z-index: 1;
+}
+
+.characters__image-container::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: var(--gradient-sunset);
+  border-radius: var(--radius-lg);
+  z-index: -1;
+}
+
+.characters__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-slow);
+}
+
+.characters__image-container:hover .characters__image {
+  transform: scale(1.05);
+}
+
+/* Character Info */
+.characters__info {
+  padding: var(--space-lg);
+}
+
+.characters__name {
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  background: var(--gradient-sunset);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: var(--space-sm);
+  line-height: 1.1;
+}
+
+.characters__role {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-warm-gold);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin-bottom: var(--space-lg);
+}
+
+.characters__bio {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-lg);
+}
+
+.characters__stats {
+  display: flex;
+  gap: var(--space-xl);
+}
+
+.characters__stat {
+  text-align: center;
+}
+
+.characters__stat-value {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--color-neon-pink);
+  display: block;
+}
+
+.characters__stat-label {
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .characters__card {
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+    text-align: center;
+  }
+
+  .characters__image-container {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .characters__stats {
+    justify-content: center;
+  }
+
+  .characters__tabs {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .characters__tab {
+    width: 100%;
+    max-width: 300px;
+  }
+}

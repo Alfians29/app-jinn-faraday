@@ -1,0 +1,311 @@
+.family-tree {
+  min-height: 100vh;
+  padding: var(--space-2xl) var(--space-lg);
+  background: linear-gradient(
+    180deg,
+    var(--color-bg-primary) 0%,
+    var(--color-bg-secondary) 100%
+  );
+  position: relative;
+  overflow: hidden;
+}
+
+.family-tree::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(
+      ellipse at 30% 70%,
+      rgba(255, 107, 53, 0.08) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 70% 30%,
+      rgba(255, 45, 149, 0.08) 0%,
+      transparent 50%
+    );
+  pointer-events: none;
+}
+
+.family-tree__header {
+  text-align: center;
+  margin-bottom: var(--space-2xl);
+  position: relative;
+  z-index: 1;
+}
+
+.family-tree__title {
+  font-size: clamp(2rem, 5vw, 4rem);
+  background: var(--gradient-sunset);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: var(--space-md);
+}
+
+.family-tree__subtitle {
+  color: var(--color-text-secondary);
+  font-size: 1.1rem;
+  letter-spacing: 0.1em;
+}
+
+/* Tree Container */
+.family-tree__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* Tree Level */
+.family-tree__level {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-lg);
+  margin-bottom: var(--space-xl);
+  position: relative;
+}
+
+.family-tree__level--parent {
+  margin-bottom: var(--space-2xl);
+}
+
+/* Connector Lines */
+.family-tree__connector {
+  position: absolute;
+  background: var(--gradient-sunset);
+  opacity: 0.5;
+}
+
+.family-tree__connector--vertical {
+  width: 2px;
+  height: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -60px;
+}
+
+.family-tree__connector--horizontal {
+  height: 2px;
+  top: -30px;
+}
+
+/* Member Card */
+.family-tree__member {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  position: relative;
+}
+
+.family-tree__member--main {
+  transform: scale(1.1);
+}
+
+.family-tree__avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid transparent;
+  background: var(--gradient-sunset);
+  padding: 3px;
+  transition: all var(--transition-normal);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.family-tree__member--main .family-tree__avatar {
+  width: 130px;
+  height: 130px;
+  box-shadow:
+    0 10px 40px rgba(0, 0, 0, 0.4),
+    var(--shadow-glow-pink);
+}
+
+.family-tree__avatar:hover {
+  transform: scale(1.1);
+  box-shadow:
+    0 15px 40px rgba(0, 0, 0, 0.4),
+    var(--shadow-glow-orange);
+}
+
+.family-tree__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.family-tree__member-name {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-primary);
+  text-align: center;
+}
+
+.family-tree__member--main .family-tree__member-name {
+  font-size: 1.1rem;
+  background: var(--gradient-sunset);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.family-tree__member-role {
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.family-tree__member--main .family-tree__member-role {
+  color: var(--color-warm-gold);
+}
+
+/* Core Family Row (Player, Wife) */
+.family-tree__core {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-2xl);
+  margin-bottom: var(--space-xl);
+  position: relative;
+}
+
+.family-tree__core::before {
+  content: '♥';
+  position: absolute;
+  font-size: 1.5rem;
+  color: var(--color-neon-pink);
+  text-shadow: var(--shadow-glow-pink);
+}
+
+/* Siblings Row */
+.family-tree__siblings {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-lg);
+  margin-bottom: var(--space-2xl);
+  padding: var(--space-lg);
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.family-tree__siblings-label {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-bg-secondary);
+  padding: 0 var(--space-md);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+/* Children Row */
+.family-tree__children {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-lg);
+  position: relative;
+}
+
+.family-tree__children::before {
+  content: '';
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 40px;
+  background: var(--gradient-sunset);
+  opacity: 0.5;
+}
+
+.family-tree__section-title {
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-lg);
+  position: relative;
+}
+
+.family-tree__section-title::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 2px;
+  background: var(--gradient-sunset);
+  margin: var(--space-sm) auto 0;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .family-tree__core {
+    gap: var(--space-xl);
+  }
+
+  .family-tree__siblings,
+  .family-tree__children {
+    flex-wrap: wrap;
+  }
+
+  .family-tree__avatar {
+    width: 80px;
+    height: 80px;
+  }
+
+  .family-tree__member--main .family-tree__avatar {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+@media (max-width: 600px) {
+  .family-tree {
+    padding: var(--space-xl) var(--space-md);
+  }
+
+  .family-tree__core {
+    flex-direction: column;
+    gap: var(--space-lg);
+  }
+
+  .family-tree__core::before {
+    display: none;
+  }
+
+  .family-tree__siblings,
+  .family-tree__children {
+    gap: var(--space-md);
+  }
+
+  .family-tree__avatar {
+    width: 70px;
+    height: 70px;
+  }
+
+  .family-tree__member--main .family-tree__avatar {
+    width: 90px;
+    height: 90px;
+  }
+
+  .family-tree__member-name {
+    font-size: 0.8rem;
+  }
+}
