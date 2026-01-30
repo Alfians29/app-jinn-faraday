@@ -11,10 +11,48 @@ body {
   width: 100%;
   height: 100%;
   font-family: 'pricedown';
+  overflow-x: hidden;
 }
 
 html {
   scroll-behavior: smooth;
+}
+
+/* Custom Scrollbar Style */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #eab308, #f97316);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #fbbf24, #fb923c);
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #eab308 #1a1a1a;
+}
+
+/* Hero Section Title Style */
+.text h1 {
+  color: #ffffff;
+  text-shadow:
+    4px 4px 0px rgba(0, 0, 0, 0.8),
+    8px 8px 15px rgba(0, 0, 0, 0.5),
+    0 0 30px rgba(234, 179, 8, 0.3);
+  -webkit-text-stroke: 2px rgba(0, 0, 0, 0.3);
+  letter-spacing: 0.02em;
+  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.1));
 }
 
 /* Hide scrollbar on mobile */
@@ -29,4 +67,88 @@ html {
   body::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera */
   }
+}
+
+/* Scroll animations */
+.scroll-animate {
+  opacity: 0;
+  transform: translateY(40px);
+  transition:
+    opacity 0.8s ease-out,
+    transform 0.8s ease-out;
+}
+
+.scroll-animate.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Story section specific animations */
+#story .limg.scroll-animate {
+  transform: translateX(-60px);
+}
+
+#story .limg.scroll-animate.animate-in {
+  transform: translateX(0);
+}
+
+#story .rg.scroll-animate {
+  transform: translateX(60px);
+}
+
+#story .rg.scroll-animate.animate-in {
+  transform: translateX(0);
+}
+
+/* Family cards animation with scale */
+#family .group.scroll-animate {
+  transform: translateY(30px) scale(0.9);
+}
+
+#family .group.scroll-animate.animate-in {
+  transform: translateY(0) scale(1);
+}
+
+/* Stagger animation delay for family groups */
+#family .group:nth-child(1) {
+  transition-delay: 0.05s;
+}
+#family .group:nth-child(2) {
+  transition-delay: 0.1s;
+}
+#family .group:nth-child(3) {
+  transition-delay: 0.15s;
+}
+#family .group:nth-child(4) {
+  transition-delay: 0.2s;
+}
+#family .group:nth-child(5) {
+  transition-delay: 0.25s;
+}
+#family .group:nth-child(6) {
+  transition-delay: 0.3s;
+}
+#family .group:nth-child(7) {
+  transition-delay: 0.35s;
+}
+#family .group:nth-child(8) {
+  transition-delay: 0.4s;
+}
+
+/* Servers section animation */
+#servers .server-card.scroll-animate {
+  transform: translateY(50px) scale(0.95);
+}
+
+#servers .server-card.scroll-animate.animate-in {
+  transform: translateY(0) scale(1);
+}
+
+/* Stagger delay for server cards */
+#servers .server-card:first-child {
+  transition-delay: 0.1s;
+}
+
+#servers .server-card:last-child {
+  transition-delay: 0.25s;
 }

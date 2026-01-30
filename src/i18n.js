@@ -16,6 +16,7 @@ const resources = {
         home: 'HOME',
         story: 'STORY',
         family: 'FAMILY',
+        servers: 'SERVERS',
       },
       // Story Section - SOA
       soa: {
@@ -54,6 +55,23 @@ const resources = {
           nephew: 'Nephew',
         },
       },
+      // Servers Section
+      servers: {
+        title: 'SERVERS',
+        description:
+          'The roleplay servers where Jinn Faraday builds his story and legacy.',
+        platform: 'GTA V Roleplay',
+        soi: {
+          name: 'State of Indonesia',
+          description:
+            'The server where Jinn started his journey with SOA motorcycle club and built his reputation on the streets of Los Santos.',
+        },
+        ime: {
+          name: 'IME Roleplay',
+          description:
+            'The server where Jinn continues his story with ALLSTAR car club, dominating the northern streets with style and power.',
+        },
+      },
       // Footer
       footer: {
         disclaimer:
@@ -78,6 +96,7 @@ const resources = {
         home: 'BERANDA',
         story: 'CERITA',
         family: 'KELUARGA',
+        servers: 'SERVER',
       },
       // Story Section - SOA
       soa: {
@@ -114,6 +133,23 @@ const resources = {
           sister: 'Saudari',
           daughter: 'Anak Perempuan',
           nephew: 'Keponakan',
+        },
+      },
+      // Servers Section
+      servers: {
+        title: 'SERVER',
+        description:
+          'Server roleplay tempat Jinn Faraday membangun cerita dan warisannya.',
+        platform: 'GTA V Roleplay',
+        soi: {
+          name: 'State of Indonesia',
+          description:
+            'Server tempat Jinn memulai perjalanannya bersama klub motor SOA dan membangun reputasinya di jalanan Los Santos.',
+        },
+        ime: {
+          name: 'IME Roleplay',
+          description:
+            'Server tempat Jinn melanjutkan ceritanya bersama klub mobil ALLSTAR, mendominasi jalanan utara dengan gaya dan kekuatan.',
         },
       },
       // Footer
