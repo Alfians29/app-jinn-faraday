@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useTranslation } from 'react-i18next';
 import 'remixicon/fonts/remixicon.css';
+
+// Register GSAP plugins
+gsap.registerPlugin(ScrollTrigger);
 
 // Animated Particles Component
 const Particles = () => {
@@ -222,22 +226,30 @@ function App() {
     const tl = gsap.timeline();
 
     tl.to('.vi-mask-group', {
-      rotate: 10,
-      duration: 2,
-      ease: 'Power4.easeInOut',
+      rotate: 8,
+      duration: 0.8,
+      ease: 'power2.inOut',
       transformOrigin: '50% 50%',
     }).to('.vi-mask-group', {
-      scale: 10,
-      duration: 2,
-      delay: -1.8,
-      ease: 'Expo.easeInOut',
+      scale: 12,
+      duration: 1,
+      delay: -0.6,
+      ease: 'power3.in',
       transformOrigin: '50% 50%',
       opacity: 0,
       onUpdate: function () {
-        if (this.progress() >= 0.9) {
-          document.querySelector('.svg').remove();
+        if (this.progress() >= 0.85) {
           setShowContent(true);
-          this.kill();
+        }
+      },
+      onComplete: function () {
+        const svgElement = document.querySelector('.svg');
+        if (svgElement) {
+          gsap.to(svgElement, {
+            opacity: 0,
+            duration: 0.3,
+            onComplete: () => svgElement.remove(),
+          });
         }
       },
     });
@@ -334,6 +346,61 @@ function App() {
         x: xMove * 1.7,
       });
     });
+
+    // Scroll animations - per section only
+    const observerOptions = {
+      threshold: 0.15,
+      rootMargin: '0px 0px -5% 0px',
+    };
+
+    const animateOnScroll = (entries) => {
+      entries.forEach((entry) => {
+        const section = entry.target;
+        const elements = section.querySelectorAll('.scroll-animate');
+
+        if (entry.isIntersecting) {
+          elements.forEach((el) => el.classList.add('animate-in'));
+        } else {
+          elements.forEach((el) => el.classList.remove('animate-in'));
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(animateOnScroll, observerOptions);
+
+    // Add scroll-animate class to Story section elements
+    document
+      .querySelectorAll('#story .limg, #story .rg, #story h1, #story p')
+      .forEach((el) => {
+        el.classList.add('scroll-animate');
+      });
+
+    // Add scroll-animate class to Family section elements (including connectors and heart)
+    document
+      .querySelectorAll(
+        '#family h2, #family h3, #family p, #family .group, #family [class*="w-1"][class*="bg-yellow"], #family [class*="text-yellow-500"][class*="text-2xl"], #family [class*="text-yellow-500"][class*="text-4xl"]',
+      )
+      .forEach((el) => {
+        el.classList.add('scroll-animate');
+      });
+
+    // Add scroll-animate class to Servers section elements
+    document
+      .querySelectorAll('#servers h2, #servers p, #servers .server-card')
+      .forEach((el) => {
+        el.classList.add('scroll-animate');
+      });
+
+    // Observe sections (not individual elements)
+    const storySection = document.querySelector('#story');
+    const familySection = document.querySelector('#family');
+    const serversSection = document.querySelector('#servers');
+
+    if (storySection) observer.observe(storySection);
+    if (familySection) observer.observe(familySection);
+    if (serversSection) observer.observe(serversSection);
+
+    return () => observer.disconnect();
   }, [showContent]);
 
   return (
@@ -351,9 +418,9 @@ function App() {
                   textAnchor='middle'
                   fill='white'
                   dominantBaseline='middle'
-                  fontFamily='Arial Black'
+                  fontFamily='pricedown'
                 >
-                  VI
+                  JF
                 </text>
               </g>
             </mask>
@@ -418,6 +485,13 @@ function App() {
                 className='text-3xl md:text-5xl lg:text-6xl text-white hover:text-yellow-500 transition-colors duration-300 font-bold'
               >
                 {t('nav.family')}
+              </a>
+              <a
+                href='#servers'
+                onClick={() => setMenuOpen(false)}
+                className='text-3xl md:text-5xl lg:text-6xl text-white hover:text-yellow-500 transition-colors duration-300 font-bold'
+              >
+                {t('nav.servers')}
               </a>
               <div className='flex gap-4 md:gap-6 mt-4 md:mt-8'>
                 <a
@@ -494,6 +568,20 @@ function App() {
                   <h1 className='text-[4rem] md:text-[6rem] lg:text-[8rem] xl:text-[12rem] leading-none -ml-10 md:-ml-16 lg:-ml-24 xl:-ml-40'>
                     faraday
                   </h1>
+                  {/* Champion Badge - Mobile/Tablet (inside text) */}
+                  <div className='champion-badge lg:hidden flex items-center gap-2 mt-2 md:mt-4 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/50 rounded-full px-4 py-2 w-fit ml-auto mr-0'>
+                    <i className='ri-trophy-fill text-yellow-500 text-lg md:text-xl animate-pulse'></i>
+                    <span className='font-[Inter] text-xs md:text-sm text-yellow-500 font-bold uppercase tracking-wider'>
+                      2x Champions
+                    </span>
+                  </div>
+                </div>
+                {/* Champion Badge - Laptop/Desktop (top-left corner) */}
+                <div className='champion-badge hidden lg:flex items-center gap-2 absolute top-6 left-6 xl:top-8 xl:left-8 z-20 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/50 rounded-full px-4 py-2 xl:px-6 xl:py-3 backdrop-blur-sm'>
+                  <i className='ri-trophy-fill text-yellow-500 text-xl xl:text-2xl animate-pulse'></i>
+                  <span className='font-[Inter] text-sm xl:text-base text-yellow-500 font-bold uppercase tracking-wider'>
+                    2x Champions
+                  </span>
                 </div>
                 <img
                   className='absolute character -bottom-[160%] left-1/2 -translate-x-1/2 scale-[2.7] rotate-[-20deg]'
@@ -854,6 +942,88 @@ function App() {
                         </div>
                       </div>
                     ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Server Roleplay Section */}
+            <div
+              id='servers'
+              className='w-full min-h-screen flex flex-col items-center justify-center bg-black py-16 md:py-24 px-4 md:px-10 relative'
+            >
+              <Particles />
+              <div className='max-w-[1400px] mx-auto w-full relative z-10'>
+                {/* Section Title */}
+                <div className='text-center mb-12 md:mb-16'>
+                  <h2 className='text-4xl md:text-6xl lg:text-7xl text-white mb-4'>
+                    {t('servers.title')}
+                  </h2>
+                  <p className='text-gray-400 font-[Inter] text-sm md:text-base lg:text-lg max-w-2xl mx-auto'>
+                    {t('servers.description')}
+                  </p>
+                </div>
+
+                {/* Server Cards */}
+                <div className='grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12'>
+                  {/* Server SOI */}
+                  <div className='group server-card relative overflow-hidden rounded-2xl border-2 border-yellow-500/20 hover:border-yellow-500/60 transition-all duration-500 bg-black/50 backdrop-blur-sm'>
+                    <div className='relative overflow-hidden'>
+                      <img
+                        src='./serversoi.png'
+                        alt='Server SOI'
+                        className='w-full h-48 md:h-64 object-cover group-hover:scale-110 transition-transform duration-700'
+                        loading='lazy'
+                        decoding='async'
+                      />
+                      <div className='absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent'></div>
+                    </div>
+                    <div className='p-6 md:p-8'>
+                      <h3 className='text-2xl md:text-3xl text-yellow-500 mb-2'>
+                        {t('servers.soi.name')}
+                      </h3>
+                      <p className='text-gray-400 font-[Inter] text-sm md:text-base mb-4'>
+                        {t('servers.soi.description')}
+                      </p>
+                      <div className='flex items-center gap-2 text-gray-500 font-[Inter] text-sm'>
+                        <i className='ri-gamepad-fill text-yellow-500'></i>
+                        <span>{t('servers.platform')}</span>
+                      </div>
+                    </div>
+                    {/* Glow effect on hover */}
+                    <div className='absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none'>
+                      <div className='absolute inset-0 bg-gradient-to-r from-yellow-500/10 to-orange-500/10'></div>
+                    </div>
+                  </div>
+
+                  {/* Server IME */}
+                  <div className='group server-card relative overflow-hidden rounded-2xl border-2 border-pink-500/20 hover:border-pink-500/60 transition-all duration-500 bg-black/50 backdrop-blur-sm'>
+                    <div className='relative overflow-hidden'>
+                      <img
+                        src='./serverime.png'
+                        alt='Server IME'
+                        className='w-full h-48 md:h-64 object-cover group-hover:scale-110 transition-transform duration-700'
+                        loading='lazy'
+                        decoding='async'
+                      />
+                      <div className='absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent'></div>
+                    </div>
+                    <div className='p-6 md:p-8'>
+                      <h3 className='text-2xl md:text-3xl text-pink-500 mb-2'>
+                        {t('servers.ime.name')}
+                      </h3>
+                      <p className='text-gray-400 font-[Inter] text-sm md:text-base mb-4'>
+                        {t('servers.ime.description')}
+                      </p>
+                      <div className='flex items-center gap-2 text-gray-500 font-[Inter] text-sm'>
+                        <i className='ri-gamepad-fill text-pink-500'></i>
+                        <span>{t('servers.platform')}</span>
+                      </div>
+                    </div>
+                    {/* Glow effect on hover */}
+                    <div className='absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none'>
+                      <div className='absolute inset-0 bg-gradient-to-r from-pink-500/10 to-purple-500/10'></div>
+                    </div>
                   </div>
                 </div>
               </div>
