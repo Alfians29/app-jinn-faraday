@@ -152,3 +152,21 @@ html {
 #servers .server-card:last-child {
   transition-delay: 0.25s;
 }
+
+/* Extras section animation (Missing Person & Bodyguard) */
+#extras .extras-card.scroll-animate {
+  transform: translateY(50px) scale(0.95);
+}
+
+#extras .extras-card.scroll-animate.animate-in {
+  transform: translateY(0) scale(1);
+}
+
+/* Stagger delay for extras cards */
+#extras .extras-card:first-child {
+  transition-delay: 0.1s;
+}
+
+#extras .extras-card:last-child {
+  transition-delay: 0.25s;
+}
