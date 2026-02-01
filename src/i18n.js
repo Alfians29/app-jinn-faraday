@@ -53,6 +53,11 @@ const resources = {
           sister: 'Sister',
           daughter: 'Daughter',
           nephew: 'Nephew',
+          children: 'Childrens',
+          brother: 'Brother',
+          siblings: 'Siblings',
+          missing: 'MISSING PERSON',
+          bodyguard: 'Bodyguard',
         },
       },
       // Servers Section
@@ -133,6 +138,11 @@ const resources = {
           sister: 'Saudari',
           daughter: 'Anak Perempuan',
           nephew: 'Keponakan',
+          children: 'Anak-anak',
+          brother: 'Saudara',
+          siblings: 'Saudara-saudara',
+          missing: 'ORANG HILANG',
+          bodyguard: 'Pengawal',
         },
       },
       // Servers Section

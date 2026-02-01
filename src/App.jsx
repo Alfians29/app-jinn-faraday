@@ -123,10 +123,16 @@ const CHARACTERS = [
 
 // Family data
 const FAMILY = {
-  father: {
+  missingPerson: {
     name: 'Abah Nanang',
     role: 'Father',
     youtube: 'https://www.youtube.com/@chunchun',
+    status: 'missing',
+  },
+  bodyguard: {
+    name: 'Spencer',
+    role: 'Bodyguard',
+    youtube: 'https://www.youtube.com/@fathirazri525',
   },
   mainCharacter: {
     name: 'Jinn Faraday',
@@ -138,7 +144,12 @@ const FAMILY = {
     role: 'Wife',
     youtube: 'https://www.youtube.com/@adelkharisma4184',
   },
-  sisters: [
+  brother: {
+    name: 'Japor',
+    role: 'Brother',
+    youtube: 'https://www.youtube.com/@fazahandiko',
+  },
+  sisters1: [
     {
       name: 'Chuya',
       role: 'Sister',
@@ -154,6 +165,8 @@ const FAMILY = {
       role: 'Sister',
       youtube: 'https://www.youtube.com/@nonamonikhaa',
     },
+  ],
+  sisters2: [
     {
       name: 'Mizu',
       role: 'Sister',
@@ -170,6 +183,11 @@ const FAMILY = {
       youtube: 'https://www.youtube.com/@iniinaaaaa',
     },
     {
+      name: 'Ovvi',
+      role: 'Sister',
+      youtube: 'https://www.youtube.com/@realovvi',
+    },
+    {
       name: 'Sage',
       role: 'Sister',
       youtube: 'https://www.youtube.com/@SeighSagee',
@@ -182,29 +200,29 @@ const FAMILY = {
   ],
   daughters: [
     {
-      name: 'Mizuki Faraday',
+      name: 'Mizuki',
       role: 'Daughter',
       youtube: 'https://www.youtube.com/@NandaKazesawa',
     },
     {
-      name: 'Marina Faraday',
+      name: 'Marina',
       role: 'Daughter',
       youtube: 'https://www.youtube.com/@cewlsii',
     },
     {
-      name: 'Bee Faraday',
+      name: 'Bee',
       role: 'Daughter',
       youtube: 'https://www.youtube.com/@Sheyuniies',
     },
     {
-      name: 'Ayaya Faraday',
+      name: 'Ayaya',
       role: 'Daughter',
       youtube: 'https://www.youtube.com/@AmeyaKirei',
     },
   ],
   nephews: [
     {
-      name: 'Joanne Faraday',
+      name: 'Joanne',
       role: 'Nephew',
       youtube: 'https://www.youtube.com/@NattyNaaa',
     },
@@ -222,34 +240,48 @@ function App() {
     i18n.changeLanguage(newLang);
     localStorage.setItem('language', newLang);
   };
+
+  const smoothScrollTo = (e, targetId) => {
+    e.preventDefault();
+    setMenuOpen(false);
+    const element = document.querySelector(targetId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   useGSAP(() => {
     const tl = gsap.timeline();
 
     tl.to('.vi-mask-group', {
       rotate: 8,
-      duration: 0.8,
+      duration: 1.2,
       ease: 'power2.inOut',
       transformOrigin: '50% 50%',
     }).to('.vi-mask-group', {
       scale: 12,
-      duration: 1,
-      delay: -0.6,
-      ease: 'power3.in',
+      duration: 1.8,
+      delay: -0.8,
+      ease: 'power2.out',
       transformOrigin: '50% 50%',
       opacity: 0,
       onUpdate: function () {
-        if (this.progress() >= 0.85) {
+        // Show content earlier for smoother transition
+        if (this.progress() >= 0.5 && !document.querySelector('.main')) {
           setShowContent(true);
         }
-      },
-      onComplete: function () {
-        const svgElement = document.querySelector('.svg');
-        if (svgElement) {
-          gsap.to(svgElement, {
-            opacity: 0,
-            duration: 0.3,
-            onComplete: () => svgElement.remove(),
-          });
+        // Start fading SVG overlay earlier
+        if (this.progress() >= 0.7) {
+          const svgElement = document.querySelector('.svg');
+          if (svgElement && !svgElement.classList.contains('fading')) {
+            svgElement.classList.add('fading');
+            gsap.to(svgElement, {
+              opacity: 0,
+              duration: 0.5,
+              ease: 'power2.out',
+              onComplete: () => svgElement.remove(),
+            });
+          }
         }
       },
     });
@@ -258,28 +290,13 @@ function App() {
   useGSAP(() => {
     if (!showContent) return;
 
-    gsap.to('.main', {
-      scale: 1,
-      rotate: 0,
-      duration: 2,
-      delay: '-1',
-      ease: 'Expo.easeInOut',
-    });
-
-    gsap.to('.sky', {
-      scale: 1.1,
-      rotate: 0,
-      duration: 2,
-      delay: '-.8',
-      ease: 'Expo.easeInOut',
-    });
-
-    gsap.to('.bg', {
-      scale: 1.1,
-      rotate: 0,
-      duration: 2,
-      delay: '-.8',
-      ease: 'Expo.easeInOut',
+    // Use a single timeline for synchronized animations
+    const heroTl = gsap.timeline({
+      defaults: {
+        duration: 1.5,
+        ease: 'power3.out',
+        force3D: true, // GPU acceleration
+      },
     });
 
     // Responsive character animation based on screen size
@@ -288,49 +305,70 @@ function App() {
     let characterBottom = '0%';
 
     if (screenWidth < 768) {
-      // Mobile
       characterScale = 0.7;
       characterBottom = '-15%';
     } else if (screenWidth < 1024) {
-      // Tablet
       characterScale = 0.8;
       characterBottom = '-25%';
     } else if (screenWidth < 1280) {
-      // Laptop 14"
       characterScale = 0.85;
       characterBottom = '-45%';
     } else if (screenWidth < 1536) {
-      // 1440px screens
       characterScale = 0.9;
       characterBottom = '-50%';
     } else if (screenWidth < 2000) {
-      // 1920px screens
       characterScale = 1.0;
       characterBottom = '-50%';
     } else {
-      // 2K+ monitors (2560px+)
       characterScale = 1.2;
       characterBottom = '-40%';
     }
 
-    gsap.to('.character', {
-      scale: characterScale,
-      xPercent: -50,
-      left: '50%',
-      bottom: characterBottom,
-      rotate: 0,
-      duration: 2,
-      delay: '-.8',
-      ease: 'Expo.easeInOut',
-    });
-
-    gsap.to('.text', {
-      scale: 1,
-      rotate: 0,
-      duration: 2,
-      delay: '-.8',
-      ease: 'Expo.easeInOut',
-    });
+    // All hero elements animate together at the same time (position 0)
+    heroTl
+      .to(
+        '.main',
+        {
+          scale: 1,
+          rotate: 0,
+        },
+        0,
+      )
+      .to(
+        '.sky',
+        {
+          scale: 1.1,
+          rotate: 0,
+        },
+        0,
+      )
+      .to(
+        '.bg',
+        {
+          scale: 1.1,
+          rotate: 0,
+        },
+        0,
+      )
+      .to(
+        '.character',
+        {
+          scale: characterScale,
+          xPercent: -50,
+          left: '50%',
+          bottom: characterBottom,
+          rotate: 0,
+        },
+        0,
+      )
+      .to(
+        '.text',
+        {
+          scale: 1,
+          rotate: 0,
+        },
+        0,
+      );
 
     const main = document.querySelector('.main');
 
@@ -338,12 +376,21 @@ function App() {
       const xMove = (e.clientX / window.innerWidth - 0.5) * 40;
       gsap.to('.main .text', {
         x: `${xMove * 0.4}%`,
+        duration: 0.3,
+        ease: 'power2.out',
+        force3D: true,
       });
       gsap.to('.sky', {
         x: xMove,
+        duration: 0.3,
+        ease: 'power2.out',
+        force3D: true,
       });
       gsap.to('.bg', {
         x: xMove * 1.7,
+        duration: 0.3,
+        ease: 'power2.out',
+        force3D: true,
       });
     });
 
@@ -391,14 +438,23 @@ function App() {
         el.classList.add('scroll-animate');
       });
 
+    // Add scroll-animate class to Extras section (Missing Person & Bodyguard)
+    document
+      .querySelectorAll('#extras .extras-card, #extras h3, #extras p')
+      .forEach((el) => {
+        el.classList.add('scroll-animate');
+      });
+
     // Observe sections (not individual elements)
     const storySection = document.querySelector('#story');
     const familySection = document.querySelector('#family');
     const serversSection = document.querySelector('#servers');
+    const extrasSection = document.querySelector('#extras');
 
     if (storySection) observer.observe(storySection);
     if (familySection) observer.observe(familySection);
     if (serversSection) observer.observe(serversSection);
+    if (extrasSection) observer.observe(extrasSection);
 
     return () => observer.disconnect();
   }, [showContent]);
@@ -406,7 +462,11 @@ function App() {
   return (
     <>
       <div className='svg flex items-center justify-center fixed top-0 left-0 z-[100] w-full h-screen overflow-hidden bg-[#000]'>
-        <svg viewBox='0 0 800 600' preserveAspectRatio='xMidYMid slice'>
+        <svg
+          viewBox='0 0 800 600'
+          preserveAspectRatio='xMidYMid slice'
+          className='w-full h-full absolute inset-0'
+        >
           <defs>
             <mask id='viMask'>
               <rect width='100%' height='100%' fill='black' />
@@ -426,7 +486,7 @@ function App() {
             </mask>
           </defs>
           <image
-            href='./bg.png'
+            href='./sky.png'
             width='100%'
             height='100%'
             preserveAspectRatio='xMidYMid slice'
@@ -467,28 +527,28 @@ function App() {
             <div className='w-full h-full flex flex-col items-center justify-center gap-4 md:gap-8'>
               <a
                 href='#home'
-                onClick={() => setMenuOpen(false)}
+                onClick={(e) => smoothScrollTo(e, '#home')}
                 className='text-3xl md:text-5xl lg:text-6xl text-white hover:text-yellow-500 transition-colors duration-300 font-bold'
               >
                 {t('nav.home')}
               </a>
               <a
                 href='#story'
-                onClick={() => setMenuOpen(false)}
+                onClick={(e) => smoothScrollTo(e, '#story')}
                 className='text-3xl md:text-5xl lg:text-6xl text-white hover:text-yellow-500 transition-colors duration-300 font-bold'
               >
                 {t('nav.story')}
               </a>
               <a
                 href='#family'
-                onClick={() => setMenuOpen(false)}
+                onClick={(e) => smoothScrollTo(e, '#family')}
                 className='text-3xl md:text-5xl lg:text-6xl text-white hover:text-yellow-500 transition-colors duration-300 font-bold'
               >
                 {t('nav.family')}
               </a>
               <a
                 href='#servers'
-                onClick={() => setMenuOpen(false)}
+                onClick={(e) => smoothScrollTo(e, '#servers')}
                 className='text-3xl md:text-5xl lg:text-6xl text-white hover:text-yellow-500 transition-colors duration-300 font-bold'
               >
                 {t('nav.servers')}
@@ -545,14 +605,14 @@ function App() {
             >
               <div className='imagesdiv relative overflow-hidden w-full h-screen'>
                 <img
-                  className='absolute sky scale-[1.5] rotate-[-20deg] top-0 left-0 w-full h-full object-cover'
+                  className='absolute sky scale-[1.15] rotate-[-20deg] top-0 left-0 w-full h-full object-cover'
                   src='./sky.png'
                   alt=''
                   loading='eager'
                   decoding='async'
                 />
                 <img
-                  className='absolute scale-[1.8] rotate-[-3deg] bg top-0 left-0 w-full h-full object-cover'
+                  className='absolute scale-[1.1] rotate-[-3deg] bg top-0 left-0 w-full h-full object-cover'
                   src='./bg.png'
                   alt=''
                   loading='eager'
@@ -736,36 +796,6 @@ function App() {
 
                 {/* Family Tree Grid */}
                 <div className='flex flex-col items-center gap-6 md:gap-10'>
-                  {/* Father Row */}
-                  <div className='flex justify-center'>
-                    <div className='group relative'>
-                      <div className='w-24 h-24 md:w-32 md:h-32 lg:w-36 lg:h-36 xl:w-36 xl:h-36 2xl:w-40 2xl:h-40 rounded-full bg-gradient-to-br from-yellow-500/20 to-yellow-600/10 border-2 md:border-4 border-yellow-500/50 group-hover:border-yellow-500 transition-all duration-300 flex items-center justify-center relative'>
-                        <i className='ri-ghost-fill text-3xl md:text-5xl lg:text-5xl xl:text-5xl 2xl:text-6xl text-yellow-500'></i>
-                        {FAMILY.father.youtube && (
-                          <a
-                            href={FAMILY.father.youtube}
-                            target='_blank'
-                            rel='noopener noreferrer'
-                            className='absolute inset-0 bg-black/70 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center'
-                          >
-                            <i className='ri-youtube-fill text-2xl md:text-4xl text-red-500 hover:scale-125 transition-transform'></i>
-                          </a>
-                        )}
-                      </div>
-                      <div className='text-center mt-2 md:mt-4'>
-                        <h3 className='text-lg md:text-xl lg:text-xl xl:text-xl 2xl:text-2xl text-white font-bold font-[Inter]'>
-                          {FAMILY.father.name}
-                        </h3>
-                        <p className='text-sm md:text-base text-yellow-500 font-[Inter]'>
-                          {t('family.roles.father')}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Connector Line */}
-                  <div className='w-1 h-4 md:h-8 bg-yellow-500/50'></div>
-
                   {/* Jinn + Wife Row */}
                   <div className='flex flex-col md:flex-row justify-center items-center gap-4 md:gap-12'>
                     {/* Jinn - Main Character */}
@@ -830,16 +860,71 @@ function App() {
                   {/* Connector Line */}
                   <div className='w-1 h-4 md:h-8 bg-yellow-500/50'></div>
 
-                  {/* Sisters Label */}
+                  {/* Siblings Label */}
                   <div className='text-center'>
                     <h3 className='text-lg md:text-2xl text-gray-400 font-[Inter]'>
-                      {t('family.roles.sister')}
+                      {t('family.roles.siblings')}
                     </h3>
                   </div>
 
-                  {/* Sisters Row */}
-                  <div className='flex justify-center gap-3 md:gap-6 flex-wrap max-w-[1000px]'>
-                    {FAMILY.sisters.map((sister, index) => (
+                  {/* Brother + Sisters Row */}
+                  <div className='flex justify-center gap-3 md:gap-6 flex-wrap max-w-[700px] items-end'>
+                    {/* Brother */}
+                    <div className='group relative'>
+                      <div className='w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-full bg-gradient-to-br from-blue-500/20 to-blue-600/10 border-2 md:border-4 border-blue-500/30 group-hover:border-blue-500 transition-all duration-300 flex items-center justify-center relative'>
+                        <i className='ri-men-fill text-2xl md:text-3xl lg:text-4xl text-blue-500 group-hover:text-blue-400 transition-colors'></i>
+                        {FAMILY.brother.youtube && (
+                          <a
+                            href={FAMILY.brother.youtube}
+                            target='_blank'
+                            rel='noopener noreferrer'
+                            className='absolute inset-0 bg-black/70 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center'
+                          >
+                            <i className='ri-youtube-fill text-xl md:text-3xl text-red-500 hover:scale-125 transition-transform'></i>
+                          </a>
+                        )}
+                      </div>
+                      <div className='text-center mt-2 md:mt-3'>
+                        <h3 className='text-xs md:text-sm text-white font-bold font-[Inter]'>
+                          {FAMILY.brother.name}
+                        </h3>
+                        <p className='text-blue-500 font-[Inter] text-[10px] md:text-xs'>
+                          {t('family.roles.brother')}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Sisters */}
+                    {FAMILY.sisters1.map((sister, index) => (
+                      <div key={index} className='group relative'>
+                        <div className='w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-full bg-gradient-to-br from-white/10 to-white/5 border-2 md:border-4 border-white/30 group-hover:border-yellow-500 transition-all duration-300 flex items-center justify-center relative'>
+                          <i className='ri-women-fill text-2xl md:text-3xl lg:text-4xl text-white/70 group-hover:text-yellow-500 transition-colors'></i>
+                          {sister.youtube && (
+                            <a
+                              href={sister.youtube}
+                              target='_blank'
+                              rel='noopener noreferrer'
+                              className='absolute inset-0 bg-black/70 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center'
+                            >
+                              <i className='ri-youtube-fill text-xl md:text-3xl text-red-500 hover:scale-125 transition-transform'></i>
+                            </a>
+                          )}
+                        </div>
+                        <div className='text-center mt-2 md:mt-3'>
+                          <h3 className='text-xs md:text-sm text-white font-bold font-[Inter]'>
+                            {sister.name}
+                          </h3>
+                          <p className='text-gray-500 font-[Inter] text-[10px] md:text-xs'>
+                            {t('family.roles.sister')}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Sisters Row 2 */}
+                  <div className='flex justify-center gap-3 md:gap-6 flex-wrap max-w-[1000px] mt-4'>
+                    {FAMILY.sisters2.map((sister, index) => (
                       <div key={index} className='group relative'>
                         <div className='w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-full bg-gradient-to-br from-white/10 to-white/5 border-2 md:border-4 border-white/30 group-hover:border-yellow-500 transition-all duration-300 flex items-center justify-center relative'>
                           <i className='ri-women-fill text-2xl md:text-3xl lg:text-4xl text-white/70 group-hover:text-yellow-500 transition-colors'></i>
@@ -872,14 +957,15 @@ function App() {
                   {/* Children Label */}
                   <div className='text-center'>
                     <h3 className='text-lg md:text-2xl text-gray-400 font-[Inter]'>
-                      {t('family.roles.daughter')}
+                      {t('family.roles.children')}
                     </h3>
                   </div>
 
-                  {/* Daughters Row */}
+                  {/* Children Row (Daughters + Nephew) */}
                   <div className='flex justify-center gap-4 md:gap-8 flex-wrap'>
+                    {/* Daughters */}
                     {FAMILY.daughters.map((daughter, index) => (
-                      <div key={index} className='group relative'>
+                      <div key={`daughter-${index}`} className='group relative'>
                         <div className='w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 rounded-full bg-gradient-to-br from-pink-400/20 to-pink-500/10 border-2 md:border-4 border-pink-400/30 group-hover:border-pink-400 transition-all duration-300 flex items-center justify-center relative'>
                           <i className='ri-bear-smile-fill text-3xl md:text-4xl lg:text-5xl text-pink-400/70 group-hover:text-pink-400 transition-colors'></i>
                           {daughter.youtube && (
@@ -903,22 +989,9 @@ function App() {
                         </div>
                       </div>
                     ))}
-                  </div>
-
-                  {/* Connector Line */}
-                  <div className='w-1 h-4 md:h-8 bg-yellow-500/50'></div>
-
-                  {/* Nephews Label */}
-                  <div className='text-center'>
-                    <h3 className='text-lg md:text-2xl text-gray-400 font-[Inter]'>
-                      {t('family.roles.nephew')}
-                    </h3>
-                  </div>
-
-                  {/* Nephews Row */}
-                  <div className='flex justify-center gap-4 md:gap-8 flex-wrap'>
+                    {/* Nephews */}
                     {FAMILY.nephews.map((nephew, index) => (
-                      <div key={index} className='group relative'>
+                      <div key={`nephew-${index}`} className='group relative'>
                         <div className='w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 rounded-full bg-gradient-to-br from-amber-400/20 to-amber-500/10 border-2 md:border-4 border-amber-400/30 group-hover:border-amber-400 transition-all duration-300 flex items-center justify-center relative'>
                           <i className='ri-user-smile-fill text-3xl md:text-4xl lg:text-5xl text-amber-400/70 group-hover:text-amber-400 transition-colors'></i>
                           {nephew.youtube && (
@@ -942,6 +1015,112 @@ function App() {
                         </div>
                       </div>
                     ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Missing Person & Bodyguard Section */}
+            <div
+              id='extras'
+              className='w-full bg-black py-8 md:py-12 px-4 md:px-10'
+            >
+              <div className='max-w-[900px] mx-auto flex flex-col md:flex-row gap-6 justify-center'>
+                {/* Bodyguard Card */}
+                <div className='flex-1 max-w-[400px] extras-card'>
+                  <div className='bg-gradient-to-b from-green-950/30 to-black border-2 border-green-500/50 rounded-lg p-4 md:p-6 relative overflow-hidden h-full'>
+                    {/* Shield banner */}
+                    <div className='absolute -left-10 top-4 w-[120%] h-6 bg-green-600 transform -rotate-3 flex items-center justify-center z-10'>
+                      <p className='text-white font-bold text-xs tracking-widest whitespace-nowrap'>
+                        | {t('family.roles.bodyguard').toUpperCase()} |{' '}
+                        {t('family.roles.bodyguard').toUpperCase()} |{' '}
+                        {t('family.roles.bodyguard').toUpperCase()} |{' '}
+                        {t('family.roles.bodyguard').toUpperCase()} |{' '}
+                        {t('family.roles.bodyguard').toUpperCase()} |{' '}
+                        {t('family.roles.bodyguard').toUpperCase()} |
+                      </p>
+                    </div>
+
+                    <div className='mt-8 flex flex-col items-center'>
+                      {/* Photo placeholder */}
+                      <div className='group relative'>
+                        <div className='w-24 h-24 md:w-28 md:h-28 rounded-lg bg-gradient-to-br from-green-900/50 to-green-950 border-4 border-green-600/50 flex items-center justify-center relative'>
+                          <i className='ri-shield-user-fill text-4xl md:text-5xl text-green-500'></i>
+                          {FAMILY.bodyguard.youtube && (
+                            <a
+                              href={FAMILY.bodyguard.youtube}
+                              target='_blank'
+                              rel='noopener noreferrer'
+                              className='absolute inset-0 bg-black/70 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center'
+                            >
+                              <i className='ri-youtube-fill text-2xl md:text-4xl text-red-500 hover:scale-125 transition-transform'></i>
+                            </a>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Name and details */}
+                      <div className='text-center mt-4'>
+                        <h3 className='text-xl md:text-2xl text-green-500 font-bold font-[Inter]'>
+                          {FAMILY.bodyguard.name}
+                        </h3>
+                        <p className='text-gray-400 font-[Inter] text-sm mt-1'>
+                          {t('family.roles.bodyguard')}
+                        </p>
+                        <p className='text-green-400/70 font-[Inter] text-xs mt-2 italic'>
+                          "Always on duty"
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Missing Person Card */}
+                <div className='flex-1 max-w-[400px] extras-card'>
+                  <div className='bg-gradient-to-b from-red-950/30 to-black border-2 border-red-500/50 rounded-lg p-4 md:p-6 relative overflow-hidden h-full'>
+                    {/* Police tape effect */}
+                    <div className='absolute -left-10 top-4 w-[120%] h-6 bg-yellow-500 transform -rotate-3 flex items-center justify-center z-10'>
+                      <p className='text-black font-bold text-xs tracking-widest whitespace-nowrap'>
+                        | {t('family.roles.missing')} |{' '}
+                        {t('family.roles.missing').toUpperCase()} |{' '}
+                        {t('family.roles.missing').toUpperCase()} |{' '}
+                        {t('family.roles.missing').toUpperCase()} |{' '}
+                        {t('family.roles.missing').toUpperCase()} |{' '}
+                        {t('family.roles.missing')} |
+                      </p>
+                    </div>
+
+                    <div className='mt-8 flex flex-col items-center'>
+                      {/* Photo placeholder */}
+                      <div className='group relative'>
+                        <div className='w-24 h-24 md:w-28 md:h-28 rounded-lg bg-gradient-to-br from-gray-800 to-gray-900 border-4 border-gray-600 flex items-center justify-center relative'>
+                          <i className='ri-ghost-fill text-4xl md:text-5xl text-gray-500'></i>
+                          {FAMILY.missingPerson.youtube && (
+                            <a
+                              href={FAMILY.missingPerson.youtube}
+                              target='_blank'
+                              rel='noopener noreferrer'
+                              className='absolute inset-0 bg-black/70 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center'
+                            >
+                              <i className='ri-youtube-fill text-2xl md:text-4xl text-red-500 hover:scale-125 transition-transform'></i>
+                            </a>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Name and details */}
+                      <div className='text-center mt-4'>
+                        <h3 className='text-xl md:text-2xl text-red-500 font-bold font-[Inter]'>
+                          {FAMILY.missingPerson.name}
+                        </h3>
+                        <p className='text-gray-400 font-[Inter] text-sm mt-1'>
+                          {t('family.roles.father')}
+                        </p>
+                        <p className='text-red-400/70 font-[Inter] text-xs mt-2 italic'>
+                          "Last seen: Unknown"
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1033,7 +1212,7 @@ function App() {
             <footer className='w-full bg-black border-t border-yellow-500/20 py-4 md:py-8 px-4 md:px-10'>
               <div className='max-w-[1800px] mx-auto text-center'>
                 <p className='text-gray-500 font-[Inter] text-sm'>
-                  Built with 💛 by{' '}
+                  Built with 🤘 by{' '}
                   <a
                     href='https://instagram.com/alfiyyann'
                     target='_blank'
@@ -1044,9 +1223,6 @@ function App() {
                   </a>
                 </p>
                 <p className='text-gray-600 font-[Inter] text-xs mt-2'>
-                  © 2026 Story of Jinn Faraday. All rights reserved.
-                </p>
-                <p className='text-gray-600 font-[Inter] text-xs mt-4'>
                   {t('footer.disclaimer')}
                 </p>
                 <p className='text-gray-600 font-[Inter] text-xs mt-1'>
