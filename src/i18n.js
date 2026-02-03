@@ -58,6 +58,7 @@ const resources = {
           siblings: 'Siblings',
           missing: 'MISSING PERSON',
           bodyguard: 'Bodyguard',
+          sweetheart: 'Sweetheart',
         },
       },
       // Servers Section
@@ -143,6 +144,7 @@ const resources = {
           siblings: 'Saudara-saudara',
           missing: 'ORANG HILANG',
           bodyguard: 'Pengawal',
+          sweetheart: 'Kesayangan',
         },
       },
       // Servers Section
