@@ -7,9 +7,9 @@ const Hero = ({ showChampionPopup, setShowChampionPopup }) => {
   return (
     <div
       id='home'
-      className='landing overflow-hidden relative w-full h-screen bg-black'
+      className='landing overflow-hidden relative w-full h-[100dvh] min-h-screen bg-black'
     >
-      <div className='imagesdiv relative overflow-hidden w-full h-screen'>
+      <div className='imagesdiv relative overflow-hidden w-full h-[100dvh] min-h-screen'>
         <img
           className='absolute sky scale-[1.15] rotate-[-20deg] top-0 left-0 w-full h-full object-cover'
           src='./sky.png'
@@ -38,7 +38,7 @@ const Hero = ({ showChampionPopup, setShowChampionPopup }) => {
           <div className='relative'>
             <button
               onClick={() => setShowChampionPopup(!showChampionPopup)}
-              className='champion-badge lg:hidden flex items-center gap-2 mt-2 md:mt-4 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/50 rounded-full px-4 py-2 w-fit ml-auto mr-0 cursor-pointer hover:border-yellow-400 hover:shadow-[0_0_15px_rgba(234,179,8,0.4)] transition-all duration-300'
+              className='champion-badge lg:hidden flex items-center gap-2 mt-2 md:mt-4 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/50 rounded-full px-4 py-2 w-fit mx-auto cursor-pointer hover:border-yellow-400 hover:shadow-[0_0_15px_rgba(234,179,8,0.4)] transition-all duration-300'
             >
               <i className='ri-trophy-fill text-yellow-500 text-lg md:text-xl animate-pulse'></i>
               <span className='font-[Inter] text-xs md:text-sm text-yellow-500 font-bold uppercase tracking-wider'>
@@ -113,7 +113,7 @@ const Hero = ({ showChampionPopup, setShowChampionPopup }) => {
             href='https://www.instagram.com/farisauliaarasy'
             target='_blank'
             rel='noopener noreferrer'
-            className='text-4xl hover:text-yellow-500 transition-colors duration-300'
+            className='text-2xl md:text-4xl hover:text-yellow-500 transition-colors duration-300'
           >
             <i className='ri-instagram-fill'></i>
           </a>
@@ -121,7 +121,7 @@ const Hero = ({ showChampionPopup, setShowChampionPopup }) => {
             href='https://www.youtube.com/@farisauliaarasy'
             target='_blank'
             rel='noopener noreferrer'
-            className='text-4xl hover:text-yellow-500 transition-colors duration-300'
+            className='text-2xl md:text-4xl hover:text-yellow-500 transition-colors duration-300'
           >
             <i className='ri-youtube-fill'></i>
           </a>
@@ -129,7 +129,7 @@ const Hero = ({ showChampionPopup, setShowChampionPopup }) => {
             href='https://www.tiktok.com/@farisauliaarasy'
             target='_blank'
             rel='noopener noreferrer'
-            className='text-4xl hover:text-yellow-500 transition-colors duration-300'
+            className='text-2xl md:text-4xl hover:text-yellow-500 transition-colors duration-300'
           >
             <i className='ri-tiktok-fill'></i>
           </a>
@@ -137,7 +137,7 @@ const Hero = ({ showChampionPopup, setShowChampionPopup }) => {
             href='https://discord.gg/kkk-511210755841064981'
             target='_blank'
             rel='noopener noreferrer'
-            className='text-4xl hover:text-yellow-500 transition-colors duration-300'
+            className='text-2xl md:text-4xl hover:text-yellow-500 transition-colors duration-300'
           >
             <i className='ri-discord-fill'></i>
           </a>
@@ -145,7 +145,7 @@ const Hero = ({ showChampionPopup, setShowChampionPopup }) => {
             href='https://www.facebook.com/farisauliaarasy'
             target='_blank'
             rel='noopener noreferrer'
-            className='text-4xl hover:text-yellow-500 transition-colors duration-300'
+            className='text-2xl md:text-4xl hover:text-yellow-500 transition-colors duration-300'
           >
             <i className='ri-facebook-fill'></i>
           </a>

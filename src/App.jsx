@@ -128,27 +128,30 @@ function App() {
 
     const main = document.querySelector('.main');
 
-    main?.addEventListener('mousemove', function (e) {
-      const xMove = (e.clientX / window.innerWidth - 0.5) * 40;
-      gsap.to('.main .text', {
-        x: `${xMove * 0.4}%`,
-        duration: 0.3,
-        ease: 'power2.out',
-        force3D: true,
+    // Only enable parallax on non-mobile devices
+    if (screenWidth >= 768) {
+      main?.addEventListener('mousemove', function (e) {
+        const xMove = (e.clientX / window.innerWidth - 0.5) * 40;
+        gsap.to('.main .text', {
+          x: `${xMove * 0.4}%`,
+          duration: 0.3,
+          ease: 'power2.out',
+          force3D: true,
+        });
+        gsap.to('.sky', {
+          x: xMove,
+          duration: 0.3,
+          ease: 'power2.out',
+          force3D: true,
+        });
+        gsap.to('.bg', {
+          x: xMove * 1.7,
+          duration: 0.3,
+          ease: 'power2.out',
+          force3D: true,
+        });
       });
-      gsap.to('.sky', {
-        x: xMove,
-        duration: 0.3,
-        ease: 'power2.out',
-        force3D: true,
-      });
-      gsap.to('.bg', {
-        x: xMove * 1.7,
-        duration: 0.3,
-        ease: 'power2.out',
-        force3D: true,
-      });
-    });
+    }
 
     // Scroll animations
     const observerOptions = {
