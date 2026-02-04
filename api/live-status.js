@@ -1,7 +1,8 @@
 // Vercel Serverless Function for YouTube Live Status
 // This checks if any of the configured YouTube channels are currently live streaming
+// OPTIMIZED: Extended caching to minimize API quota usage
 
-const CACHE_DURATION_MS = 3 * 60 * 1000; // 3 minutes cache
+const CACHE_DURATION_MS = 30 * 60 * 1000; // 30 minutes cache (was 3 min)
 
 let cache = {
   data: null,
@@ -12,7 +13,8 @@ export default async function handler(req, res) {
   // Set CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET');
-  res.setHeader('Cache-Control', 's-maxage=180, stale-while-revalidate');
+  // Edge cache for 30 min, serve stale for up to 1 hour while revalidating
+  res.setHeader('Cache-Control', 's-maxage=1800, stale-while-revalidate=3600');
 
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
