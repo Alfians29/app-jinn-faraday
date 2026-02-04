@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 
-const POLLING_INTERVAL = 3 * 60 * 1000; // 3 minutes
+const POLLING_INTERVAL = 15 * 60 * 1000; // 15 minutes (was 3 min) - quota optimization
 const API_ENDPOINT = '/api/live-status';
 
 /**
