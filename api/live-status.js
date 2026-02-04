@@ -89,8 +89,8 @@ export default async function handler(req, res) {
       }
     }
 
-    // Step 2: Get the most recent video from each channel's uploads playlist
-    // We'll batch these requests to minimize API calls
+    // Step 2: Get recent videos from each channel's uploads playlist
+    // Check last 5 videos to catch live streams even if uploads happened after stream started
     const videoIds = [];
     const videoToChannel = {};
 
@@ -103,15 +103,18 @@ export default async function handler(req, res) {
         playlistUrl.searchParams.set('part', 'contentDetails');
         playlistUrl.searchParams.set('playlistId', playlistId);
         playlistUrl.searchParams.set('key', apiKey);
-        playlistUrl.searchParams.set('maxResults', '1'); // Only get most recent video
+        playlistUrl.searchParams.set('maxResults', '5'); // Check last 5 videos for live streams
 
         const playlistResponse = await fetch(playlistUrl.toString());
         const playlistData = await playlistResponse.json();
 
         if (playlistData.items && playlistData.items.length > 0) {
-          const videoId = playlistData.items[0].contentDetails.videoId;
-          videoIds.push(videoId);
-          videoToChannel[videoId] = channelId;
+          // Add all videos from the playlist (up to 5)
+          for (const item of playlistData.items) {
+            const videoId = item.contentDetails.videoId;
+            videoIds.push(videoId);
+            videoToChannel[videoId] = channelId;
+          }
         }
       } catch (err) {
         console.error(`Error fetching playlist for channel ${channelId}:`, err);
