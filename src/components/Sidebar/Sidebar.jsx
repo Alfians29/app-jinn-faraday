@@ -55,48 +55,7 @@ const Sidebar = ({ menuOpen, setMenuOpen, toggleLanguage, smoothScrollTo }) => {
           >
             {t('nav.servers')}
           </a>
-          <div className='flex gap-4 md:gap-6 mt-4 md:mt-8'>
-            <a
-              href='https://www.instagram.com/farisauliaarasy'
-              target='_blank'
-              rel='noopener noreferrer'
-              className='text-3xl text-white hover:text-yellow-500 transition-colors'
-            >
-              <i className='ri-instagram-fill'></i>
-            </a>
-            <a
-              href='https://www.youtube.com/@farisauliaarasy'
-              target='_blank'
-              rel='noopener noreferrer'
-              className='text-3xl text-white hover:text-yellow-500 transition-colors'
-            >
-              <i className='ri-youtube-fill'></i>
-            </a>
-            <a
-              href='https://www.tiktok.com/@farisauliaarasy'
-              target='_blank'
-              rel='noopener noreferrer'
-              className='text-3xl text-white hover:text-yellow-500 transition-colors'
-            >
-              <i className='ri-tiktok-fill'></i>
-            </a>
-            <a
-              href='https://discord.gg/kkk-511210755841064981'
-              target='_blank'
-              rel='noopener noreferrer'
-              className='text-3xl text-white hover:text-yellow-500 transition-colors'
-            >
-              <i className='ri-discord-fill'></i>
-            </a>
-            <a
-              href='https://www.facebook.com/farisauliaarasy'
-              target='_blank'
-              rel='noopener noreferrer'
-              className='text-3xl text-white hover:text-yellow-500 transition-colors'
-            >
-              <i className='ri-facebook-fill'></i>
-            </a>
-          </div>
+
           {/* Language Toggle Button */}
           <button
             onClick={toggleLanguage}
