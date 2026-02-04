@@ -1,146 +1,42 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Particles } from '../Story/Story';
-
-// Easter Egg data
-const EASTER_EGG = {
-  wife: {
-    name: 'Seno Parulian',
-    role: 'Sweetheart',
-    image: './familytree/seno.png',
-    youtube: 'https://www.youtube.com/@sMagic',
-  },
-};
-
-// Family data
-const FAMILY = {
-  missingPerson: {
-    name: 'Abah Nanang',
-    role: 'Father',
-    image: './familytree/nanang.png',
-    youtube: 'https://www.youtube.com/@chunchun',
-    status: 'missing',
-  },
-  bodyguard: {
-    name: 'Spencer',
-    role: 'Bodyguard',
-    image: './familytree/spencer.png',
-    youtube: 'https://www.youtube.com/@fathirazri525',
-  },
-  mainCharacter: {
-    name: 'Jinn Faraday',
-    role: 'Main Character',
-    image: './familytree/jinn.png',
-    youtube: 'https://www.youtube.com/@farisauliaarasy',
-  },
-  wife: {
-    name: 'Adel Faraday',
-    role: 'Wife',
-    image: './familytree/adel.png',
-    youtube: 'https://www.youtube.com/@adelkharisma4184',
-  },
-  brother: {
-    name: 'Japor',
-    role: 'Brother',
-    image: './familytree/japor.png',
-    youtube: 'https://www.youtube.com/@fazahandiko',
-  },
-  sisters1: [
-    {
-      name: 'Chuya',
-      role: 'Sister',
-      image: './familytree/chuya.png',
-      youtube: 'https://www.youtube.com/@Urfavchuya',
-    },
-    {
-      name: 'Ayana',
-      role: 'Sister',
-      image: './familytree/ayana.png',
-      youtube: 'https://www.youtube.com/@celiazu',
-    },
-    {
-      name: 'Mychia',
-      role: 'Sister',
-      image: './familytree/mychia.png',
-      youtube: 'https://www.youtube.com/@nonamonikhaa',
-    },
-  ],
-  sisters2: [
-    {
-      name: 'Mizu',
-      role: 'Sister',
-      image: './familytree/mizu.png',
-      youtube: 'https://www.youtube.com/@Mizuuu',
-    },
-    {
-      name: 'Yuri',
-      role: 'Sister',
-      image: './familytree/yuri.png',
-      youtube: 'https://www.youtube.com/@pookiemiaw',
-    },
-    {
-      name: 'Aina',
-      role: 'Sister',
-      image: './familytree/aina.png',
-      youtube: 'https://www.youtube.com/@iniinaaaaa',
-    },
-    {
-      name: 'Ovvi',
-      role: 'Sister',
-      image: './familytree/ovvi.png',
-      youtube: 'https://www.youtube.com/@realovvi',
-    },
-    {
-      name: 'Sage',
-      role: 'Sister',
-      image: './familytree/sage.png',
-      youtube: 'https://www.youtube.com/@SeighSagee',
-    },
-    {
-      name: 'Lora',
-      role: 'Sister',
-      image: './familytree/lora.png',
-      youtube: 'https://www.youtube.com/@haeraabc',
-    },
-  ],
-  daughters: [
-    {
-      name: 'Mizuki',
-      role: 'Daughter',
-      image: './familytree/mizuki.png',
-      youtube: 'https://www.youtube.com/@NandaKazesawa',
-    },
-    {
-      name: 'Marina',
-      role: 'Daughter',
-      image: './familytree/marina.png',
-      youtube: 'https://www.youtube.com/@cewlsii',
-    },
-    {
-      name: 'Bee',
-      role: 'Daughter',
-      image: './familytree/bee.png',
-      youtube: 'https://www.youtube.com/@Sheyuniies',
-    },
-    {
-      name: 'Ayaya',
-      role: 'Daughter',
-      image: './familytree/ayaya.png',
-      youtube: 'https://www.youtube.com/@AmeyaKirei',
-    },
-  ],
-  nephews: [
-    {
-      name: 'Joanne',
-      role: 'Nephew',
-      image: './familytree/joanne.png',
-      youtube: 'https://www.youtube.com/@NattyNaaa',
-    },
-  ],
-};
+import { useLiveStatus } from '../../hooks/useLiveStatus';
+import LiveBadge from '../LiveBadge/LiveBadge';
+import { FAMILY, EASTER_EGG } from '../../data/familyData';
 
 const Family = ({ wifeEasterEgg, setWifeEasterEgg }) => {
   const { t } = useTranslation();
+
+  // Collect all channel IDs for live status checking
+  const allChannelIds = useMemo(() => {
+    const ids = [];
+    // Add all family member channel IDs
+    if (FAMILY.mainCharacter.channelId)
+      ids.push(FAMILY.mainCharacter.channelId);
+    if (FAMILY.wife.channelId) ids.push(FAMILY.wife.channelId);
+    if (FAMILY.brother.channelId) ids.push(FAMILY.brother.channelId);
+    if (FAMILY.bodyguard.channelId) ids.push(FAMILY.bodyguard.channelId);
+    if (FAMILY.missingPerson.channelId)
+      ids.push(FAMILY.missingPerson.channelId);
+    FAMILY.sisters1.forEach((s) => s.channelId && ids.push(s.channelId));
+    FAMILY.sisters2.forEach((s) => s.channelId && ids.push(s.channelId));
+    FAMILY.daughters.forEach((d) => d.channelId && ids.push(d.channelId));
+    FAMILY.nephews.forEach((n) => n.channelId && ids.push(n.channelId));
+    if (EASTER_EGG.wife.channelId) ids.push(EASTER_EGG.wife.channelId);
+    return ids;
+  }, []);
+
+  // Hook to track live status
+  const { isChannelLive } = useLiveStatus(allChannelIds);
+
+  // Helper function to get border classes based on live status
+  const getLiveBorderClass = (channelId, normalBorder) => {
+    if (channelId && isChannelLive(channelId)) {
+      return 'border-red-500 shadow-[0_0_20px_rgba(239,68,68,0.6),0_0_40px_rgba(239,68,68,0.3)] animate-pulse';
+    }
+    return normalBorder;
+  };
 
   return (
     <>
@@ -169,7 +65,12 @@ const Family = ({ wifeEasterEgg, setWifeEasterEgg }) => {
             <div className='flex flex-col md:flex-row justify-center items-center gap-4 md:gap-12'>
               {/* Jinn - Main Character */}
               <div className='group relative'>
-                <div className='w-32 h-32 md:w-40 md:h-40 lg:w-44 lg:h-44 xl:w-44 xl:h-44 2xl:w-48 2xl:h-48 rounded-full bg-gradient-to-br from-yellow-500/30 to-orange-500/20 border-2 md:border-4 border-yellow-500 shadow-[0_0_20px_rgba(234,179,8,0.4)] md:shadow-[0_0_30px_rgba(234,179,8,0.4)] group-hover:shadow-[0_0_50px_rgba(234,179,8,0.6)] transition-all duration-300 flex items-center justify-center relative overflow-hidden'>
+                <LiveBadge
+                  isLive={isChannelLive(FAMILY.mainCharacter.channelId)}
+                />
+                <div
+                  className={`w-32 h-32 md:w-40 md:h-40 lg:w-44 lg:h-44 xl:w-44 xl:h-44 2xl:w-48 2xl:h-48 rounded-full bg-gradient-to-br from-yellow-500/30 to-orange-500/20 border-2 md:border-4 ${getLiveBorderClass(FAMILY.mainCharacter.channelId, 'border-yellow-500 shadow-[0_0_20px_rgba(234,179,8,0.4)] md:shadow-[0_0_30px_rgba(234,179,8,0.4)]')} group-hover:shadow-[0_0_50px_rgba(234,179,8,0.6)] transition-all duration-300 flex items-center justify-center relative overflow-hidden`}
+                >
                   <img
                     src={FAMILY.mainCharacter.image}
                     alt={FAMILY.mainCharacter.name}
@@ -201,7 +102,16 @@ const Family = ({ wifeEasterEgg, setWifeEasterEgg }) => {
 
               {/* Wife */}
               <div className='group relative'>
-                <div className='w-32 h-32 md:w-40 md:h-40 lg:w-44 lg:h-44 xl:w-44 xl:h-44 2xl:w-48 2xl:h-48 rounded-full bg-gradient-to-br from-pink-500/30 to-pink-600/20 border-2 md:border-4 border-pink-500/50 group-hover:border-pink-500 shadow-[0_0_15px_rgba(236,72,153,0.3)] md:shadow-[0_0_20px_rgba(236,72,153,0.3)] transition-all duration-300 flex items-center justify-center relative overflow-hidden'>
+                <LiveBadge
+                  isLive={isChannelLive(
+                    wifeEasterEgg
+                      ? EASTER_EGG.wife.channelId
+                      : FAMILY.wife.channelId,
+                  )}
+                />
+                <div
+                  className={`w-32 h-32 md:w-40 md:h-40 lg:w-44 lg:h-44 xl:w-44 xl:h-44 2xl:w-48 2xl:h-48 rounded-full bg-gradient-to-br from-pink-500/30 to-pink-600/20 border-2 md:border-4 ${getLiveBorderClass(wifeEasterEgg ? EASTER_EGG.wife.channelId : FAMILY.wife.channelId, 'border-pink-500/50 group-hover:border-pink-500 shadow-[0_0_15px_rgba(236,72,153,0.3)] md:shadow-[0_0_20px_rgba(236,72,153,0.3)]')} transition-all duration-300 flex items-center justify-center relative overflow-hidden`}
+                >
                   <img
                     src={
                       wifeEasterEgg ? EASTER_EGG.wife.image : FAMILY.wife.image
@@ -254,7 +164,10 @@ const Family = ({ wifeEasterEgg, setWifeEasterEgg }) => {
             <div className='flex justify-center gap-3 md:gap-6 flex-wrap max-w-[700px] items-end'>
               {/* Brother */}
               <div className='group relative'>
-                <div className='w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-full bg-gradient-to-br from-blue-500/20 to-blue-600/10 border-2 md:border-4 border-blue-500/30 group-hover:border-blue-500 transition-all duration-300 flex items-center justify-center relative overflow-hidden'>
+                <LiveBadge isLive={isChannelLive(FAMILY.brother.channelId)} />
+                <div
+                  className={`w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-full bg-gradient-to-br from-blue-500/20 to-blue-600/10 border-2 md:border-4 ${getLiveBorderClass(FAMILY.brother.channelId, 'border-blue-500/30 group-hover:border-blue-500')} transition-all duration-300 flex items-center justify-center relative overflow-hidden`}
+                >
                   <img
                     src={FAMILY.brother.image}
                     alt={FAMILY.brother.name}
@@ -284,7 +197,10 @@ const Family = ({ wifeEasterEgg, setWifeEasterEgg }) => {
               {/* Sisters */}
               {FAMILY.sisters1.map((sister, index) => (
                 <div key={index} className='group relative'>
-                  <div className='w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-full bg-gradient-to-br from-white/10 to-white/5 border-2 md:border-4 border-white/30 group-hover:border-yellow-500 transition-all duration-300 flex items-center justify-center relative overflow-hidden'>
+                  <LiveBadge isLive={isChannelLive(sister.channelId)} />
+                  <div
+                    className={`w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-full bg-gradient-to-br from-white/10 to-white/5 border-2 md:border-4 ${getLiveBorderClass(sister.channelId, 'border-white/30 group-hover:border-yellow-500')} transition-all duration-300 flex items-center justify-center relative overflow-hidden`}
+                  >
                     <img
                       src={sister.image}
                       alt={sister.name}
@@ -317,7 +233,10 @@ const Family = ({ wifeEasterEgg, setWifeEasterEgg }) => {
             <div className='flex justify-center gap-3 md:gap-6 flex-wrap max-w-[1000px] mt-4'>
               {FAMILY.sisters2.map((sister, index) => (
                 <div key={index} className='group relative'>
-                  <div className='w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-full bg-gradient-to-br from-white/10 to-white/5 border-2 md:border-4 border-white/30 group-hover:border-yellow-500 transition-all duration-300 flex items-center justify-center relative overflow-hidden'>
+                  <LiveBadge isLive={isChannelLive(sister.channelId)} />
+                  <div
+                    className={`w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-full bg-gradient-to-br from-white/10 to-white/5 border-2 md:border-4 ${getLiveBorderClass(sister.channelId, 'border-white/30 group-hover:border-yellow-500')} transition-all duration-300 flex items-center justify-center relative overflow-hidden`}
+                  >
                     <img
                       src={sister.image}
                       alt={sister.name}
@@ -361,7 +280,10 @@ const Family = ({ wifeEasterEgg, setWifeEasterEgg }) => {
               {/* Daughters */}
               {FAMILY.daughters.map((daughter, index) => (
                 <div key={`daughter-${index}`} className='group relative'>
-                  <div className='w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 rounded-full bg-gradient-to-br from-pink-400/20 to-pink-500/10 border-2 md:border-4 border-pink-400/30 group-hover:border-pink-400 transition-all duration-300 flex items-center justify-center relative overflow-hidden'>
+                  <LiveBadge isLive={isChannelLive(daughter.channelId)} />
+                  <div
+                    className={`w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 rounded-full bg-gradient-to-br from-pink-400/20 to-pink-500/10 border-2 md:border-4 ${getLiveBorderClass(daughter.channelId, 'border-pink-400/30 group-hover:border-pink-400')} transition-all duration-300 flex items-center justify-center relative overflow-hidden`}
+                  >
                     <img
                       src={daughter.image}
                       alt={daughter.name}
@@ -391,7 +313,10 @@ const Family = ({ wifeEasterEgg, setWifeEasterEgg }) => {
               {/* Nephews */}
               {FAMILY.nephews.map((nephew, index) => (
                 <div key={`nephew-${index}`} className='group relative'>
-                  <div className='w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 rounded-full bg-gradient-to-br from-amber-400/20 to-amber-500/10 border-2 md:border-4 border-amber-400/30 group-hover:border-amber-400 transition-all duration-300 flex items-center justify-center relative overflow-hidden'>
+                  <LiveBadge isLive={isChannelLive(nephew.channelId)} />
+                  <div
+                    className={`w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 rounded-full bg-gradient-to-br from-amber-400/20 to-amber-500/10 border-2 md:border-4 ${getLiveBorderClass(nephew.channelId, 'border-amber-400/30 group-hover:border-amber-400')} transition-all duration-300 flex items-center justify-center relative overflow-hidden`}
+                  >
                     <img
                       src={nephew.image}
                       alt={nephew.name}

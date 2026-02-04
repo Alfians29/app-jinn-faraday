@@ -10,7 +10,7 @@ const Footer = () => {
         <p className='text-gray-500 font-[Inter] text-sm'>
           Built with 🤘 by{' '}
           <a
-            href='https://instagram.com/alfiyyann'
+            href='https://www.tiktok.com/@letsgoalfian'
             target='_blank'
             rel='noopener noreferrer'
             className='text-yellow-500 hover:text-yellow-400 transition-colors'
