@@ -1,8 +1,8 @@
 // Vercel Serverless Function for YouTube Live Status
-// This checks if any of the configured YouTube channels are currently live streaming
-// OPTIMIZED: Extended caching to minimize API quota usage
+// OPTIMIZED: Uses channels.list + videos.list (much cheaper than search.list)
+// Cost: ~30 units per check vs ~2000 units with search.list = 66x savings!
 
-const CACHE_DURATION_MS = 30 * 60 * 1000; // 30 minutes cache (was 3 min)
+const CACHE_DURATION_MS = 15 * 60 * 1000; // 15 minutes cache (can afford more frequent checks now)
 
 let cache = {
   data: null,
@@ -13,8 +13,8 @@ export default async function handler(req, res) {
   // Set CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET');
-  // Edge cache for 30 min, serve stale for up to 1 hour while revalidating
-  res.setHeader('Cache-Control', 's-maxage=1800, stale-while-revalidate=3600');
+  // Edge cache for 15 min, serve stale for up to 30 min while revalidating
+  res.setHeader('Cache-Control', 's-maxage=900, stale-while-revalidate=1800');
 
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -40,9 +40,8 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Get channel IDs from query or use all configured ones
     const channelIds = req.query.channelIds
-      ? req.query.channelIds.split(',')
+      ? req.query.channelIds.split(',').filter((id) => id)
       : [];
 
     if (channelIds.length === 0) {
@@ -52,58 +51,111 @@ export default async function handler(req, res) {
       });
     }
 
-    // YouTube API: Search for live broadcasts
     const liveChannels = {};
 
-    // Batch channels (max 50 per request)
-    const batchSize = 50;
-    for (let i = 0; i < channelIds.length; i += batchSize) {
-      const batch = channelIds.slice(i, i + batchSize);
+    // Initialize all channels as not live
+    channelIds.forEach((id) => {
+      liveChannels[id] = { isLive: false };
+    });
 
-      // Search for live streams from these channels
-      const searchUrl = new URL('https://www.googleapis.com/youtube/v3/search');
-      searchUrl.searchParams.set('part', 'snippet');
-      searchUrl.searchParams.set('channelId', batch.join(','));
-      searchUrl.searchParams.set('type', 'video');
-      searchUrl.searchParams.set('eventType', 'live');
-      searchUrl.searchParams.set('key', apiKey);
-      searchUrl.searchParams.set('maxResults', '50');
+    // Step 1: Get all channels' upload playlist IDs in ONE call (~3 units)
+    const channelsUrl = new URL(
+      'https://www.googleapis.com/youtube/v3/channels',
+    );
+    channelsUrl.searchParams.set('part', 'contentDetails');
+    channelsUrl.searchParams.set('id', channelIds.join(','));
+    channelsUrl.searchParams.set('key', apiKey);
+    channelsUrl.searchParams.set('maxResults', '50');
 
-      // For each channel, check individually (more accurate)
-      for (const channelId of batch) {
-        const channelSearchUrl = new URL(
-          'https://www.googleapis.com/youtube/v3/search',
+    const channelsResponse = await fetch(channelsUrl.toString());
+    const channelsData = await channelsResponse.json();
+
+    if (!channelsData.items || channelsData.items.length === 0) {
+      return res.status(200).json({
+        liveChannels,
+        cached: false,
+        timestamp: now,
+        quotaUsed: 3,
+      });
+    }
+
+    // Map channel ID to uploads playlist ID
+    const channelToPlaylist = {};
+    for (const channel of channelsData.items) {
+      const uploadsPlaylistId =
+        channel.contentDetails?.relatedPlaylists?.uploads;
+      if (uploadsPlaylistId) {
+        channelToPlaylist[channel.id] = uploadsPlaylistId;
+      }
+    }
+
+    // Step 2: Get the most recent video from each channel's uploads playlist
+    // We'll batch these requests to minimize API calls
+    const videoIds = [];
+    const videoToChannel = {};
+
+    // Fetch recent videos from each playlist (~1 unit per call)
+    for (const [channelId, playlistId] of Object.entries(channelToPlaylist)) {
+      try {
+        const playlistUrl = new URL(
+          'https://www.googleapis.com/youtube/v3/playlistItems',
         );
-        channelSearchUrl.searchParams.set('part', 'snippet');
-        channelSearchUrl.searchParams.set('channelId', channelId);
-        channelSearchUrl.searchParams.set('type', 'video');
-        channelSearchUrl.searchParams.set('eventType', 'live');
-        channelSearchUrl.searchParams.set('key', apiKey);
-        channelSearchUrl.searchParams.set('maxResults', '1');
+        playlistUrl.searchParams.set('part', 'contentDetails');
+        playlistUrl.searchParams.set('playlistId', playlistId);
+        playlistUrl.searchParams.set('key', apiKey);
+        playlistUrl.searchParams.set('maxResults', '1'); // Only get most recent video
 
-        try {
-          const response = await fetch(channelSearchUrl.toString());
-          const data = await response.json();
+        const playlistResponse = await fetch(playlistUrl.toString());
+        const playlistData = await playlistResponse.json();
 
-          if (data.items && data.items.length > 0) {
+        if (playlistData.items && playlistData.items.length > 0) {
+          const videoId = playlistData.items[0].contentDetails.videoId;
+          videoIds.push(videoId);
+          videoToChannel[videoId] = channelId;
+        }
+      } catch (err) {
+        console.error(`Error fetching playlist for channel ${channelId}:`, err);
+      }
+    }
+
+    // Step 3: Check all videos for live streaming status in ONE call (~3 units)
+    if (videoIds.length > 0) {
+      const videosUrl = new URL('https://www.googleapis.com/youtube/v3/videos');
+      videosUrl.searchParams.set('part', 'liveStreamingDetails,snippet');
+      videosUrl.searchParams.set('id', videoIds.join(','));
+      videosUrl.searchParams.set('key', apiKey);
+
+      const videosResponse = await fetch(videosUrl.toString());
+      const videosData = await videosResponse.json();
+
+      if (videosData.items) {
+        for (const video of videosData.items) {
+          const channelId = videoToChannel[video.id];
+          const liveDetails = video.liveStreamingDetails;
+
+          // Check if currently live (has actualStartTime but no actualEndTime)
+          if (
+            liveDetails &&
+            liveDetails.actualStartTime &&
+            !liveDetails.actualEndTime
+          ) {
             liveChannels[channelId] = {
               isLive: true,
-              videoId: data.items[0].id.videoId,
-              title: data.items[0].snippet.title,
-              thumbnail: data.items[0].snippet.thumbnails?.default?.url,
+              videoId: video.id,
+              title: video.snippet?.title,
+              thumbnail: video.snippet?.thumbnails?.default?.url,
             };
-          } else {
-            liveChannels[channelId] = { isLive: false };
           }
-        } catch (err) {
-          liveChannels[channelId] = { isLive: false, error: true };
         }
       }
     }
 
+    // Approximate quota used: 3 (channels) + 20 (playlists) + 3 (videos) = ~26 units
+    const quotaUsed = 3 + Object.keys(channelToPlaylist).length + 3;
+
     // Update cache
     cache = {
-      data: { liveChannels, timestamp: now },
+      data: { liveChannels, timestamp: now, quotaUsed },
       timestamp: now,
     };
 
@@ -111,6 +163,7 @@ export default async function handler(req, res) {
       liveChannels,
       cached: false,
       timestamp: now,
+      quotaUsed,
     });
   } catch (error) {
     console.error('YouTube API error:', error);
