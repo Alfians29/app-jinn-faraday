@@ -2,14 +2,18 @@
 // FEATURES:
 // - Uses search.list for reliable live detection
 // - Auto-rotates API keys when quota exceeded
-// - 30 minute cache for quota efficiency
+// - 30 minute cache using Upstash Redis (shared across all instances)
 
-const CACHE_DURATION_MS = 30 * 60 * 1000; // 30 minutes cache
+import { Redis } from '@upstash/redis';
 
-let cache = {
-  data: null,
-  timestamp: 0,
-};
+const CACHE_KEY = 'youtube-live-status';
+const CACHE_TTL_SECONDS = 1800; // 30 minutes
+
+// Initialize Redis client
+const redis = new Redis({
+  url: process.env.KV_REST_API_URL,
+  token: process.env.KV_REST_API_TOKEN,
+});
 
 // Track which API key index to use (persists during function lifecycle)
 let currentKeyIndex = 0;
@@ -75,14 +79,22 @@ export default async function handler(req, res) {
     });
   }
 
-  // Check cache
+  // Check Redis cache
   const now = Date.now();
-  if (cache.data && now - cache.timestamp < CACHE_DURATION_MS) {
-    return res.status(200).json({
-      ...cache.data,
-      cached: true,
-      cacheAge: Math.round((now - cache.timestamp) / 1000),
-    });
+  try {
+    const cachedData = await redis.get(CACHE_KEY);
+    if (cachedData) {
+      return res.status(200).json({
+        ...cachedData,
+        cached: true,
+        cacheAge: cachedData.timestamp
+          ? Math.round((now - cachedData.timestamp) / 1000)
+          : 0,
+      });
+    }
+  } catch (cacheError) {
+    console.error('Redis cache read error:', cacheError);
+    // Continue without cache if Redis fails
   }
 
   try {
@@ -162,18 +174,22 @@ export default async function handler(req, res) {
     // Estimate quota used (100 units per search call)
     const quotaUsed = channelIds.length * 100;
 
-    // Update cache
-    cache = {
-      data: {
-        liveChannels,
-        timestamp: now,
-        quotaUsed,
-        apiKeyUsed: usedKeyIndex + 1,
-        totalApiKeys: apiKeys.length,
-        keysExhausted,
-      },
+    // Update Redis cache
+    const cacheData = {
+      liveChannels,
       timestamp: now,
+      quotaUsed,
+      apiKeyUsed: usedKeyIndex + 1,
+      totalApiKeys: apiKeys.length,
+      keysExhausted,
     };
+
+    try {
+      await redis.set(CACHE_KEY, cacheData, { ex: CACHE_TTL_SECONDS });
+    } catch (cacheError) {
+      console.error('Redis cache write error:', cacheError);
+      // Continue even if cache write fails
+    }
 
     return res.status(200).json({
       liveChannels,
