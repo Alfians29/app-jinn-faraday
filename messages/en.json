@@ -1,0 +1,65 @@
+{
+  "hero": {
+    "story": "STORY",
+    "of": "OF",
+    "jinn": "JINN",
+    "faraday": "FARADAY"
+  },
+  "nav": {
+    "home": "HOME",
+    "story": "STORY",
+    "family": "FAMILY",
+    "servers": "SERVERS"
+  },
+  "soa": {
+    "title": "Two Wheels,",
+    "subtitle": "One Brotherhood",
+    "description1": "It all started with Jinn Faraday and a few of his friends who often hung out at Ron's gas station in downtown Los Santos. At first, it was just a place to hang out, make some money, and spend the night talking about motorcycles and the tough life on the streets. From that hangout spot, Jinn and his friends slowly built a motorcycle club that eventually became known as SOA. Until finally they were kicked out and forced to leave, as if the city that had once been their home was pushing them out.",
+    "description2": "Over time, their activities on the streets became more violent. SOA began to get involved in territorial conflicts with other gangs, clashes on the streets became commonplace, and some members began to get involved in the black market in order to survive. From gang wars to drug trafficking, it all became part of their lives. The name SOA became increasingly well-known, not just as a motorcycle club, but as a group ready to fight back if their territory or business was threatened.",
+    "description3": "As tensions escalated in the city, Jinn and his crew chose to temporarily retreat and move to an old motel in Sandy Shores, a desert area far from the hustle and bustle. There, they regrouped, strengthened their bonds, and slowly rebuilt their influence. Eventually, when the name SOA resurfaced in Los Santos, people knew that the motorcycle gang founded by Jinn Faraday and his crew wasn't just back, they had returned with a force that made many choose to back down rather than seek trouble."
+  },
+  "allstar": {
+    "title": "North Crown,",
+    "subtitle": "Street Authority",
+    "description1": "After his journey with SOA ended, Jinn Faraday finally found a new home with ALLSTAR, a car club whose name continues to rise in the northern region of Los Santos. Although ALLSTAR is known as a car and street racing community, Jinn joined not because of his driving skills, but because of his fighting and weapon skills, something that quickly made him well known within the group. In every major conflict involving ALLSTAR, Jinn is often at the forefront when things get chaotic.",
+    "description2": "In downtown Los Santos, ALLSTAR is known to the public for their large garage, which is always bustling with modified cars and customers from all walks of life. From the outside, it looks like a successful automotive business owned by a regular car community. But behind the garage and racing activities, ALLSTAR runs a shady business that makes their name even more feared on the streets, including a drug distribution network that gives them significant influence in the city.",
+    "description3": "Therefore, ALLSTAR is not just known as a car club but also as a dangerous gang when conflicts arise. Many other groups choose to back down rather than confront them directly, especially when their best members take to the streets. Now, Jinn and the ALLSTAR members are moving from a large mansion in the northern part of the city, and everyone in Los Santos knows one thing: behind their fast cars and luxurious lifestyle, ALLSTAR is a group that few dare to confront directly."
+  },
+  "family": {
+    "title1": "The Faraday",
+    "title2": "Family",
+    "description": "Blood is thicker than water in Los Santos. Meet the Faraday family, united by loyalty and driven by ambition.",
+    "roles": {
+      "father": "Father",
+      "mainCharacter": "Main Character",
+      "wife": "Wife",
+      "sister": "Sister",
+      "daughter": "Daughter",
+      "nephew": "Nephew",
+      "children": "Childrens",
+      "brother": "Brother",
+      "siblings": "Siblings",
+      "missing": "MISSING PERSON",
+      "bodyguard": "Bodyguard",
+      "sweetheart": "Sweetheart"
+    }
+  },
+  "servers": {
+    "title": "SERVERS",
+    "description": "The roleplay servers where Jinn Faraday builds his story and legacy.",
+    "platform": "GTA V Roleplay",
+    "soi": {
+      "name": "State of Indonesia",
+      "description": "The server where Jinn started his journey with SOA motorcycle club and built his reputation on the streets of Los Santos."
+    },
+    "ime": {
+      "name": "IME Roleplay",
+      "description": "The server where Jinn continues his story with ALLSTAR car club, dominating the northern streets with style and power."
+    }
+  },
+  "footer": {
+    "disclaimer": "This is a fan-made website for entertainment purposes only.",
+    "notAffiliated": "Not affiliated with Rockstar Games or Take-Two Interactive.",
+    "roleplay": "All characters and stories are fictional roleplay content."
+  }
+}

@@ -1,36 +1,48 @@
-import React, { useState } from 'react';
+'use client';
+
+import { useState } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useTranslation } from 'react-i18next';
-import 'remixicon/fonts/remixicon.css';
+import { useTranslations, useLocale } from 'next-intl';
+import { useRouter, usePathname } from 'next/navigation';
 
 // Import components
-import Hero from './components/Hero/Hero';
-import Story from './components/Story/Story';
-import Family from './components/Family/Family';
-import Servers from './components/Servers/Servers';
-import Footer from './components/Footer/Footer';
-import Sidebar from './components/Sidebar/Sidebar';
+import Hero from './Hero';
+import Story from './Story';
+import Family from './Family';
+import Servers from './Servers';
+import Footer from './Footer';
+import Sidebar from './Sidebar';
 
 // Register GSAP plugins
-gsap.registerPlugin(ScrollTrigger);
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
-function App() {
-  const { t, i18n } = useTranslation();
-  let [showContent, setShowContent] = useState(false);
-  let [activeCharacter, setActiveCharacter] = useState(0);
-  let [wifeEasterEgg, setWifeEasterEgg] = useState(false);
-  let [menuOpen, setMenuOpen] = useState(false);
-  let [showChampionPopup, setShowChampionPopup] = useState(false);
+export default function HomePage() {
+  const t = useTranslations();
+  const locale = useLocale();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const [showContent, setShowContent] = useState(false);
+  const [activeCharacter, setActiveCharacter] = useState(0);
+  const [wifeEasterEgg, setWifeEasterEgg] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [showChampionPopup, setShowChampionPopup] = useState(false);
 
   const toggleLanguage = () => {
-    const newLang = i18n.language === 'en' ? 'id' : 'en';
-    i18n.changeLanguage(newLang);
-    localStorage.setItem('language', newLang);
+    const newLocale = locale === 'en' ? 'id' : 'en';
+    // Get the path without locale prefix
+    const pathWithoutLocale = pathname.replace(/^\/(en|id)/, '') || '/';
+    router.push(`/${newLocale}${pathWithoutLocale}`);
   };
 
-  const smoothScrollTo = (e, targetId) => {
+  const smoothScrollTo = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    targetId: string,
+  ) => {
     e.preventDefault();
     setMenuOpen(false);
     const element = document.querySelector(targetId);
@@ -131,7 +143,8 @@ function App() {
     // Only enable parallax on non-mobile devices
     if (screenWidth >= 768) {
       main?.addEventListener('mousemove', function (e) {
-        const xMove = (e.clientX / window.innerWidth - 0.5) * 40;
+        const xMove =
+          ((e as MouseEvent).clientX / window.innerWidth - 0.5) * 40;
         gsap.to('.main .text', {
           x: `${xMove * 0.4}%`,
           duration: 0.3,
@@ -159,7 +172,7 @@ function App() {
       rootMargin: '0px 0px -5% 0px',
     };
 
-    const animateOnScroll = (entries) => {
+    const animateOnScroll = (entries: IntersectionObserverEntry[]) => {
       entries.forEach((entry) => {
         const section = entry.target;
         const elements = section.querySelectorAll('.scroll-animate');
@@ -240,7 +253,7 @@ function App() {
             </mask>
           </defs>
           <image
-            href='./sky.png'
+            href='/sky.png'
             width='100%'
             height='100%'
             preserveAspectRatio='xMidYMid slice'
@@ -278,5 +291,3 @@ function App() {
     </>
   );
 }
-
-export default App;

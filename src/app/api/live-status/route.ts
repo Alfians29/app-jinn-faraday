@@ -1,15 +1,17 @@
-// Vercel Serverless Function for YouTube Live Status
-// FEATURES:
-// - Uses search.list for reliable live detection
-// - Auto-rotates API keys when quota exceeded
-// - 30 minute cache for quota efficiency
+import { NextRequest, NextResponse } from 'next/server';
+import { Redis } from '@upstash/redis';
 
-const CACHE_DURATION_MS = 30 * 60 * 1000; // 30 minutes cache
+const CACHE_KEY = 'youtube-live-status';
+const CACHE_TTL_SECONDS = 1800; // 30 minutes
 
-let cache = {
-  data: null,
-  timestamp: 0,
-};
+// Initialize Redis client only if env vars are available
+const redis =
+  process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN
+    ? new Redis({
+        url: process.env.KV_REST_API_URL,
+        token: process.env.KV_REST_API_TOKEN,
+      })
+    : null;
 
 // Track which API key index to use (persists during function lifecycle)
 let currentKeyIndex = 0;
@@ -18,7 +20,7 @@ let currentKeyIndex = 0;
  * Get API keys from environment variable
  * Supports multiple keys separated by comma
  */
-function getApiKeys() {
+function getApiKeys(): string[] {
   const keys = process.env.YOUTUBE_API_KEY || '';
   return keys
     .split(',')
@@ -26,10 +28,16 @@ function getApiKeys() {
     .filter((k) => k.length > 0);
 }
 
+interface YouTubeError {
+  error?: {
+    errors?: Array<{ reason: string }>;
+  };
+}
+
 /**
  * Check if error is quota exceeded
  */
-function isQuotaError(data) {
+function isQuotaError(data: YouTubeError): boolean {
   if (data.error) {
     const reason = data.error.errors?.[0]?.reason;
     return reason === 'quotaExceeded' || reason === 'dailyLimitExceeded';
@@ -37,10 +45,28 @@ function isQuotaError(data) {
   return false;
 }
 
+interface YouTubeSearchItem {
+  id: { videoId: string };
+  snippet: {
+    title: string;
+    thumbnails?: { default?: { url: string } };
+  };
+}
+
+interface YouTubeSearchResponse {
+  items?: YouTubeSearchItem[];
+  error?: {
+    errors?: Array<{ reason: string }>;
+  };
+}
+
 /**
  * Check live status for a single channel using search.list
  */
-async function checkChannelLive(channelId, apiKey) {
+async function checkChannelLive(
+  channelId: string,
+  apiKey: string,
+): Promise<{ data: YouTubeSearchResponse; isQuotaError: boolean }> {
   const searchUrl = new URL('https://www.googleapis.com/youtube/v3/search');
   searchUrl.searchParams.set('part', 'snippet');
   searchUrl.searchParams.set('channelId', channelId);
@@ -55,51 +81,74 @@ async function checkChannelLive(channelId, apiKey) {
   return { data, isQuotaError: isQuotaError(data) };
 }
 
-export default async function handler(req, res) {
-  // Set CORS headers
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET');
-  // Edge cache for 30 min, serve stale for up to 1 hour while revalidating
-  res.setHeader('Cache-Control', 's-maxage=1800, stale-while-revalidate=3600');
+interface CacheData {
+  liveChannels: Record<string, unknown>;
+  timestamp: number;
+  quotaUsed?: number;
+  apiKeyUsed?: number;
+  totalApiKeys?: number;
+  keysExhausted?: boolean;
+}
 
-  if (req.method !== 'GET') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
+export async function GET(request: NextRequest) {
   const apiKeys = getApiKeys();
 
   if (apiKeys.length === 0) {
-    return res.status(500).json({
-      error: 'YouTube API key not configured',
-      liveChannels: {},
-    });
+    return NextResponse.json(
+      {
+        error: 'YouTube API key not configured',
+        liveChannels: {},
+      },
+      { status: 500 },
+    );
   }
 
-  // Check cache
+  // Check Redis cache
   const now = Date.now();
-  if (cache.data && now - cache.timestamp < CACHE_DURATION_MS) {
-    return res.status(200).json({
-      ...cache.data,
-      cached: true,
-      cacheAge: Math.round((now - cache.timestamp) / 1000),
-    });
+  if (redis) {
+    try {
+      const cachedData = await redis.get<CacheData>(CACHE_KEY);
+      if (cachedData) {
+        return NextResponse.json({
+          ...cachedData,
+          cached: true,
+          cacheAge: cachedData.timestamp
+            ? Math.round((now - cachedData.timestamp) / 1000)
+            : 0,
+        });
+      }
+    } catch (cacheError) {
+      console.error('Redis cache read error:', cacheError);
+      // Continue without cache if Redis fails
+    }
   }
 
   try {
-    const channelIds = req.query.channelIds
-      ? req.query.channelIds.split(',').filter((id) => id)
+    const searchParams = request.nextUrl.searchParams;
+    const channelIdsParam = searchParams.get('channelIds');
+    const channelIds = channelIdsParam
+      ? channelIdsParam.split(',').filter((id) => id)
       : [];
 
     if (channelIds.length === 0) {
-      return res.status(200).json({
+      return NextResponse.json({
         liveChannels: {},
         message: 'No channel IDs provided',
       });
     }
 
-    const liveChannels = {};
+    const liveChannels: Record<
+      string,
+      {
+        isLive: boolean;
+        videoId?: string;
+        title?: string;
+        thumbnail?: string;
+        error?: string | boolean;
+      }
+    > = {};
     let keysExhausted = false;
-    let usedKeyIndex = currentKeyIndex;
+    const usedKeyIndex = currentKeyIndex;
 
     // Check each channel
     for (const channelId of channelIds) {
@@ -162,20 +211,26 @@ export default async function handler(req, res) {
     // Estimate quota used (100 units per search call)
     const quotaUsed = channelIds.length * 100;
 
-    // Update cache
-    cache = {
-      data: {
-        liveChannels,
-        timestamp: now,
-        quotaUsed,
-        apiKeyUsed: usedKeyIndex + 1,
-        totalApiKeys: apiKeys.length,
-        keysExhausted,
-      },
+    // Update Redis cache
+    const cacheData: CacheData = {
+      liveChannels,
       timestamp: now,
+      quotaUsed,
+      apiKeyUsed: usedKeyIndex + 1,
+      totalApiKeys: apiKeys.length,
+      keysExhausted,
     };
 
-    return res.status(200).json({
+    if (redis) {
+      try {
+        await redis.set(CACHE_KEY, cacheData, { ex: CACHE_TTL_SECONDS });
+      } catch (cacheError) {
+        console.error('Redis cache write error:', cacheError);
+        // Continue even if cache write fails
+      }
+    }
+
+    return NextResponse.json({
       liveChannels,
       cached: false,
       timestamp: now,
@@ -186,9 +241,12 @@ export default async function handler(req, res) {
     });
   } catch (error) {
     console.error('YouTube API error:', error);
-    return res.status(500).json({
-      error: 'Failed to fetch live status',
-      liveChannels: {},
-    });
+    return NextResponse.json(
+      {
+        error: 'Failed to fetch live status',
+        liveChannels: {},
+      },
+      { status: 500 },
+    );
   }
 }

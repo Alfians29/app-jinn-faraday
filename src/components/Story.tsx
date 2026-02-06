@@ -1,9 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 
 // Animated Particles Component
-const Particles = () => {
-  const [particles, setParticles] = useState([]);
+export function Particles() {
+  const [particles, setParticles] = useState<
+    Array<{
+      id: number;
+      left: number;
+      top: number;
+      size: number;
+      duration: number;
+      delay: number;
+      opacity: number;
+      color: string;
+    }>
+  >([]);
 
   useEffect(() => {
     const generateParticles = () => {
@@ -81,7 +94,7 @@ const Particles = () => {
       `}</style>
     </div>
   );
-};
+}
 
 // Character data for switching
 const CHARACTERS = [
@@ -90,19 +103,27 @@ const CHARACTERS = [
     name: 'SOA',
     title: 'Two Wheels,',
     subtitle: 'One Brotherhood',
-    image: './arcsoa.png',
+    image: '/arcsoa.png',
   },
   {
     id: 2,
     name: 'ALLSTAR',
     title: 'North Crown,',
     subtitle: 'Street Authority',
-    image: './arcas.png',
+    image: '/arcas.png',
   },
 ];
 
-const Story = ({ activeCharacter, setActiveCharacter }) => {
-  const { t } = useTranslation();
+interface StoryProps {
+  activeCharacter: number;
+  setActiveCharacter: (value: number) => void;
+}
+
+export default function Story({
+  activeCharacter,
+  setActiveCharacter,
+}: StoryProps) {
+  const t = useTranslations();
 
   return (
     <div
@@ -180,7 +201,4 @@ const Story = ({ activeCharacter, setActiveCharacter }) => {
       </div>
     </div>
   );
-};
-
-export default Story;
-export { Particles };
+}

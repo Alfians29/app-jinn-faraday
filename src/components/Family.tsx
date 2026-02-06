@@ -1,16 +1,26 @@
-import React, { useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Particles } from '../Story/Story';
-import { useLiveStatus } from '../../hooks/useLiveStatus';
-import LiveBadge from '../LiveBadge/LiveBadge';
-import { FAMILY, EASTER_EGG } from '../../data/familyData';
+'use client';
 
-const Family = ({ wifeEasterEgg, setWifeEasterEgg }) => {
-  const { t } = useTranslation();
+import { useMemo } from 'react';
+import { useTranslations } from 'next-intl';
+import { Particles } from './Story';
+import { useLiveStatus } from '@/hooks/useLiveStatus';
+import LiveBadge from './LiveBadge';
+import { FAMILY, EASTER_EGG } from '@/data/familyData';
+
+interface FamilyProps {
+  wifeEasterEgg: boolean;
+  setWifeEasterEgg: (value: boolean) => void;
+}
+
+export default function Family({
+  wifeEasterEgg,
+  setWifeEasterEgg,
+}: FamilyProps) {
+  const t = useTranslations('family');
 
   // Collect all channel IDs for live status checking
   const allChannelIds = useMemo(() => {
-    const ids = [];
+    const ids: (string | undefined)[] = [];
     // Add all family member channel IDs
     if (FAMILY.mainCharacter.channelId)
       ids.push(FAMILY.mainCharacter.channelId);
@@ -31,7 +41,10 @@ const Family = ({ wifeEasterEgg, setWifeEasterEgg }) => {
   const { isChannelLive } = useLiveStatus(allChannelIds);
 
   // Helper function to get border classes based on live status
-  const getLiveBorderClass = (channelId, normalBorder) => {
+  const getLiveBorderClass = (
+    channelId: string | undefined,
+    normalBorder: string,
+  ) => {
     if (channelId && isChannelLive(channelId)) {
       return 'border-red-500 shadow-[0_0_20px_rgba(239,68,68,0.6),0_0_40px_rgba(239,68,68,0.3)] animate-pulse';
     }
@@ -49,20 +62,20 @@ const Family = ({ wifeEasterEgg, setWifeEasterEgg }) => {
           {/* Section Title */}
           <div className='text-center mb-8 md:mb-12 lg:mb-14 xl:mb-16'>
             <h2 className='text-4xl md:text-5xl lg:text-5xl xl:text-5xl 2xl:text-7xl text-white mb-2 md:mb-4'>
-              {t('family.title1')}
+              {t('title1')}
             </h2>
             <h2 className='text-4xl md:text-5xl lg:text-5xl xl:text-5xl 2xl:text-7xl text-yellow-500'>
-              {t('family.title2')}
+              {t('title2')}
             </h2>
             <p className='mt-4 md:mt-6 text-sm md:text-base lg:text-base xl:text-base 2xl:text-xl font-[Inter] text-gray-400 max-w-2xl mx-auto px-4'>
-              {t('family.description')}
+              {t('description')}
             </p>
           </div>
 
           {/* Family Tree Grid */}
           <div className='flex flex-col items-center gap-6 md:gap-10'>
             {/* Jinn + Wife Row */}
-            <div className='flex flex-col md:flex-row justify-center items-center gap-4 md:gap-12'>
+            <div className='flex flex-row justify-center items-center gap-4 md:gap-12'>
               {/* Jinn - Main Character */}
               <div className='group relative'>
                 <LiveBadge
@@ -92,7 +105,7 @@ const Family = ({ wifeEasterEgg, setWifeEasterEgg }) => {
                     {FAMILY.mainCharacter.name}
                   </h3>
                   <p className='text-sm md:text-base text-yellow-500 font-[Inter]'>
-                    {t('family.roles.mainCharacter')}
+                    {t('roles.mainCharacter')}
                   </p>
                 </div>
               </div>
@@ -142,9 +155,7 @@ const Family = ({ wifeEasterEgg, setWifeEasterEgg }) => {
                     {wifeEasterEgg ? EASTER_EGG.wife.name : FAMILY.wife.name}
                   </h3>
                   <p className='text-sm md:text-base text-pink-500 font-[Inter]'>
-                    {wifeEasterEgg
-                      ? t('family.roles.sweetheart')
-                      : t('family.roles.wife')}
+                    {wifeEasterEgg ? t('roles.sweetheart') : t('roles.wife')}
                   </p>
                 </div>
               </div>
@@ -156,7 +167,7 @@ const Family = ({ wifeEasterEgg, setWifeEasterEgg }) => {
             {/* Siblings Label */}
             <div className='text-center'>
               <h3 className='text-lg md:text-2xl text-gray-400 font-[Inter]'>
-                {t('family.roles.siblings')}
+                {t('roles.siblings')}
               </h3>
             </div>
 
@@ -189,7 +200,7 @@ const Family = ({ wifeEasterEgg, setWifeEasterEgg }) => {
                     {FAMILY.brother.name}
                   </h3>
                   <p className='text-blue-500 font-[Inter] text-[10px] md:text-xs'>
-                    {t('family.roles.brother')}
+                    {t('roles.brother')}
                   </p>
                 </div>
               </div>
@@ -222,7 +233,7 @@ const Family = ({ wifeEasterEgg, setWifeEasterEgg }) => {
                       {sister.name}
                     </h3>
                     <p className='text-gray-500 font-[Inter] text-[10px] md:text-xs'>
-                      {t('family.roles.sister')}
+                      {t('roles.sister')}
                     </p>
                   </div>
                 </div>
@@ -258,7 +269,7 @@ const Family = ({ wifeEasterEgg, setWifeEasterEgg }) => {
                       {sister.name}
                     </h3>
                     <p className='text-gray-500 font-[Inter] text-[10px] md:text-xs'>
-                      {t('family.roles.sister')}
+                      {t('roles.sister')}
                     </p>
                   </div>
                 </div>
@@ -271,7 +282,7 @@ const Family = ({ wifeEasterEgg, setWifeEasterEgg }) => {
             {/* Children Label */}
             <div className='text-center'>
               <h3 className='text-lg md:text-2xl text-gray-400 font-[Inter]'>
-                {t('family.roles.children')}
+                {t('roles.children')}
               </h3>
             </div>
 
@@ -305,7 +316,7 @@ const Family = ({ wifeEasterEgg, setWifeEasterEgg }) => {
                       {daughter.name}
                     </h3>
                     <p className='text-pink-400 font-[Inter] text-[10px] md:text-xs'>
-                      {t('family.roles.daughter')}
+                      {t('roles.daughter')}
                     </p>
                   </div>
                 </div>
@@ -338,7 +349,7 @@ const Family = ({ wifeEasterEgg, setWifeEasterEgg }) => {
                       {nephew.name}
                     </h3>
                     <p className='text-amber-400 font-[Inter] text-[10px] md:text-xs'>
-                      {t('family.roles.nephew')}
+                      {t('roles.nephew')}
                     </p>
                   </div>
                 </div>
@@ -357,19 +368,30 @@ const Family = ({ wifeEasterEgg, setWifeEasterEgg }) => {
               {/* Shield banner */}
               <div className='absolute -left-10 top-4 w-[120%] h-6 bg-green-600 transform -rotate-3 flex items-center justify-center z-10'>
                 <p className='text-white font-bold text-xs tracking-widest whitespace-nowrap'>
-                  | {t('family.roles.bodyguard').toUpperCase()} |{' '}
-                  {t('family.roles.bodyguard').toUpperCase()} |{' '}
-                  {t('family.roles.bodyguard').toUpperCase()} |{' '}
-                  {t('family.roles.bodyguard').toUpperCase()} |{' '}
-                  {t('family.roles.bodyguard').toUpperCase()} |{' '}
-                  {t('family.roles.bodyguard').toUpperCase()} |
+                  | {t('roles.bodyguard').toUpperCase()} |{' '}
+                  {t('roles.bodyguard').toUpperCase()} |{' '}
+                  {t('roles.bodyguard').toUpperCase()} |{' '}
+                  {t('roles.bodyguard').toUpperCase()} |{' '}
+                  {t('roles.bodyguard').toUpperCase()} |{' '}
+                  {t('roles.bodyguard').toUpperCase()} |
                 </p>
               </div>
 
               <div className='mt-8 flex flex-col items-center'>
                 {/* Photo placeholder */}
                 <div className='group relative'>
-                  <div className='w-24 h-24 md:w-28 md:h-28 rounded-lg bg-gradient-to-br from-green-900/50 to-green-950 border-4 border-green-600/50 flex items-center justify-center relative overflow-hidden'>
+                  {/* Live Badge for rectangular card */}
+                  {isChannelLive(FAMILY.bodyguard.channelId) && (
+                    <div className='absolute -top-2 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1 bg-red-600 px-2 py-0.5 rounded-full shadow-lg animate-pulse'>
+                      <span className='w-2 h-2 bg-white rounded-full animate-ping'></span>
+                      <span className='text-white text-[10px] md:text-xs font-bold uppercase tracking-wider'>
+                        LIVE
+                      </span>
+                    </div>
+                  )}
+                  <div
+                    className={`w-24 h-24 md:w-28 md:h-28 rounded-lg bg-gradient-to-br from-green-900/50 to-green-950 border-4 ${isChannelLive(FAMILY.bodyguard.channelId) ? 'border-red-500 shadow-[0_0_20px_rgba(239,68,68,0.6),0_0_40px_rgba(239,68,68,0.3)] animate-pulse' : 'border-green-600/50'} flex items-center justify-center relative overflow-hidden transition-all duration-300`}
+                  >
                     <img
                       src={FAMILY.bodyguard.image}
                       alt={FAMILY.bodyguard.name}
@@ -394,10 +416,10 @@ const Family = ({ wifeEasterEgg, setWifeEasterEgg }) => {
                     {FAMILY.bodyguard.name}
                   </h3>
                   <p className='text-gray-400 font-[Inter] text-sm mt-1'>
-                    {t('family.roles.bodyguard')}
+                    {t('roles.bodyguard')}
                   </p>
                   <p className='text-green-400/70 font-[Inter] text-xs mt-2 italic'>
-                    "Always on duty"
+                    &quot;Always on duty&quot;
                   </p>
                 </div>
               </div>
@@ -410,19 +432,28 @@ const Family = ({ wifeEasterEgg, setWifeEasterEgg }) => {
               {/* Police tape effect */}
               <div className='absolute -left-10 top-4 w-[120%] h-6 bg-yellow-500 transform -rotate-3 flex items-center justify-center z-10'>
                 <p className='text-black font-bold text-xs tracking-widest whitespace-nowrap'>
-                  | {t('family.roles.missing')} |{' '}
-                  {t('family.roles.missing').toUpperCase()} |{' '}
-                  {t('family.roles.missing').toUpperCase()} |{' '}
-                  {t('family.roles.missing').toUpperCase()} |{' '}
-                  {t('family.roles.missing').toUpperCase()} |{' '}
-                  {t('family.roles.missing')} |
+                  | {t('roles.missing')} | {t('roles.missing').toUpperCase()} |{' '}
+                  {t('roles.missing').toUpperCase()} |{' '}
+                  {t('roles.missing').toUpperCase()} |{' '}
+                  {t('roles.missing').toUpperCase()} | {t('roles.missing')} |
                 </p>
               </div>
 
               <div className='mt-8 flex flex-col items-center'>
                 {/* Photo placeholder */}
                 <div className='group relative'>
-                  <div className='w-24 h-24 md:w-28 md:h-28 rounded-lg bg-gradient-to-br from-red-900/50 to-red-950 border-4 border-red-600/50 flex items-center justify-center relative overflow-hidden'>
+                  {/* Live Badge for rectangular card */}
+                  {isChannelLive(FAMILY.missingPerson.channelId) && (
+                    <div className='absolute -top-2 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1 bg-red-600 px-2 py-0.5 rounded-full shadow-lg animate-pulse'>
+                      <span className='w-2 h-2 bg-white rounded-full animate-ping'></span>
+                      <span className='text-white text-[10px] md:text-xs font-bold uppercase tracking-wider'>
+                        LIVE
+                      </span>
+                    </div>
+                  )}
+                  <div
+                    className={`w-24 h-24 md:w-28 md:h-28 rounded-lg bg-gradient-to-br from-red-900/50 to-red-950 border-4 ${isChannelLive(FAMILY.missingPerson.channelId) ? 'border-red-500 shadow-[0_0_20px_rgba(239,68,68,0.6),0_0_40px_rgba(239,68,68,0.3)] animate-pulse' : 'border-red-600/50'} flex items-center justify-center relative overflow-hidden transition-all duration-300`}
+                  >
                     <img
                       src={FAMILY.missingPerson.image}
                       alt={FAMILY.missingPerson.name}
@@ -447,10 +478,10 @@ const Family = ({ wifeEasterEgg, setWifeEasterEgg }) => {
                     {FAMILY.missingPerson.name}
                   </h3>
                   <p className='text-gray-400 font-[Inter] text-sm mt-1'>
-                    {t('family.roles.father')}
+                    {t('roles.father')}
                   </p>
                   <p className='text-red-400/70 font-[Inter] text-xs mt-2 italic'>
-                    "Last seen: Unknown"
+                    &quot;Last seen: Unknown&quot;
                   </p>
                 </div>
               </div>
@@ -460,6 +491,4 @@ const Family = ({ wifeEasterEgg, setWifeEasterEgg }) => {
       </div>
     </>
   );
-};
-
-export default Family;
+}

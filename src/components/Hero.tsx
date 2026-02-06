@@ -1,8 +1,18 @@
-import React from 'react';
-import { useTranslation } from 'react-i18next';
+'use client';
 
-const Hero = ({ showChampionPopup, setShowChampionPopup }) => {
-  const { t } = useTranslation();
+import { useTranslations } from 'next-intl';
+import Image from 'next/image';
+
+interface HeroProps {
+  showChampionPopup: boolean;
+  setShowChampionPopup: (value: boolean) => void;
+}
+
+export default function Hero({
+  showChampionPopup,
+  setShowChampionPopup,
+}: HeroProps) {
+  const t = useTranslations('hero');
 
   return (
     <div
@@ -12,24 +22,24 @@ const Hero = ({ showChampionPopup, setShowChampionPopup }) => {
       <div className='imagesdiv relative overflow-hidden w-full h-[100dvh] min-h-screen'>
         <img
           className='absolute sky scale-[1.15] rotate-[-20deg] top-0 left-0 w-full h-full object-cover'
-          src='./sky.png'
+          src='/sky.png'
           alt=''
           loading='eager'
           decoding='async'
         />
         <img
           className='absolute scale-[1.1] rotate-[-3deg] bg top-0 left-0 w-full h-full object-cover'
-          src='./bg.png'
+          src='/bg.png'
           alt=''
           loading='eager'
           decoding='async'
         />
         <div className='text text-white flex flex-col gap-1 md:gap-2 lg:gap-2 xl:gap-3 absolute top-10 md:top-16 lg:top-16 xl:top-20 left-1/2 -translate-x-1/2 scale-[0.5] md:scale-[0.7] lg:scale-[0.9] xl:scale-[1.4] rotate-[-10deg]'>
           <h1 className='text-[4rem] md:text-[6rem] lg:text-[8rem] xl:text-[12rem] leading-none -ml-10 md:-ml-16 lg:-ml-24 xl:-ml-40'>
-            {t('hero.story').toLowerCase()}
+            {t('story').toLowerCase()}
           </h1>
           <h1 className='text-[4rem] md:text-[6rem] lg:text-[8rem] xl:text-[12rem] leading-none'>
-            {t('hero.of').toLowerCase()} jinn
+            {t('of').toLowerCase()} jinn
           </h1>
           <h1 className='text-[4rem] md:text-[6rem] lg:text-[8rem] xl:text-[12rem] leading-none -ml-10 md:-ml-16 lg:-ml-24 xl:-ml-40'>
             faraday
@@ -101,7 +111,7 @@ const Hero = ({ showChampionPopup, setShowChampionPopup }) => {
         </div>
         <img
           className='absolute character -bottom-[160%] left-1/2 -translate-x-1/2 scale-[2.7] rotate-[-20deg]'
-          src='./herobg.png'
+          src='/herobg.png'
           alt=''
           loading='eager'
           decoding='async'
@@ -153,6 +163,4 @@ const Hero = ({ showChampionPopup, setShowChampionPopup }) => {
       </div>
     </div>
   );
-};
-
-export default Hero;
+}

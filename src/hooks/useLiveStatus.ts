@@ -1,25 +1,63 @@
+'use client';
+
 import { useState, useEffect, useCallback } from 'react';
 
-const POLLING_INTERVAL = 15 * 60 * 1000; // 15 minutes (was 3 min) - quota optimization
+const POLLING_INTERVAL = 15 * 60 * 1000; // 15 minutes - quota optimization
 const API_ENDPOINT = '/api/live-status';
 
-/**
- * Hook to track YouTube live status for family members
- * @param {string[]} channelIds - Array of YouTube channel IDs to check
- * @returns {{ liveChannels: Object, isLoading: boolean, error: string|null, refetch: Function }}
- */
-export function useLiveStatus(channelIds = []) {
-  const [liveChannels, setLiveChannels] = useState({});
+interface LiveChannelInfo {
+  isLive: boolean;
+  videoId?: string;
+  title?: string;
+  thumbnail?: string;
+  error?: string | boolean;
+}
+
+interface LiveChannels {
+  [channelId: string]: LiveChannelInfo;
+}
+
+interface UseLiveStatusReturn {
+  liveChannels: LiveChannels;
+  isLoading: boolean;
+  error: string | null;
+  refetch: () => Promise<void>;
+  isChannelLive: (channelId: string | undefined) => boolean;
+  getLiveInfo: (channelId: string) => LiveChannelInfo;
+}
+
+export function useLiveStatus(
+  channelIds: (string | undefined)[] = [],
+): UseLiveStatusReturn {
+  const [liveChannels, setLiveChannels] = useState<LiveChannels>({});
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchLiveStatus = useCallback(async () => {
+    // 🔧 MOCK MODE: Set to true to show all channels as "LIVE" for testing
+    const MOCK_ALL_LIVE = false;
+
+    if (MOCK_ALL_LIVE) {
+      const validChannelIds = channelIds.filter((id): id is string => !!id);
+      const mockData: LiveChannels = {};
+      validChannelIds.forEach((id) => {
+        mockData[id] = {
+          isLive: true,
+          title: 'Mock Live Stream',
+          videoId: 'mock-video-id',
+        };
+      });
+      setLiveChannels(mockData);
+      setIsLoading(false);
+      return;
+    }
+
     if (!channelIds || channelIds.length === 0) {
       return;
     }
 
     // Filter out null/undefined channel IDs
-    const validChannelIds = channelIds.filter((id) => id);
+    const validChannelIds = channelIds.filter((id): id is string => !!id);
     if (validChannelIds.length === 0) {
       return;
     }
@@ -42,7 +80,7 @@ export function useLiveStatus(channelIds = []) {
       }
     } catch (err) {
       console.error('Error fetching live status:', err);
-      setError(err.message);
+      setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
       setIsLoading(false);
     }
@@ -59,25 +97,16 @@ export function useLiveStatus(channelIds = []) {
     return () => clearInterval(interval);
   }, [fetchLiveStatus]);
 
-  /**
-   * Check if a specific channel is live
-   * @param {string} channelId
-   * @returns {boolean}
-   */
   const isChannelLive = useCallback(
-    (channelId) => {
+    (channelId: string | undefined): boolean => {
+      if (!channelId) return false;
       return liveChannels[channelId]?.isLive || false;
     },
     [liveChannels],
   );
 
-  /**
-   * Get live stream info for a channel
-   * @param {string} channelId
-   * @returns {{ isLive: boolean, videoId?: string, title?: string }}
-   */
   const getLiveInfo = useCallback(
-    (channelId) => {
+    (channelId: string): LiveChannelInfo => {
       return liveChannels[channelId] || { isLive: false };
     },
     [liveChannels],

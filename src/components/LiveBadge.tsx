@@ -1,10 +1,11 @@
-import React from 'react';
+'use client';
 
-/**
- * Live streaming badge component
- * Shows a pulsing red "LIVE" badge when a member is streaming
- */
-const LiveBadge = ({ isLive, className = '' }) => {
+interface LiveBadgeProps {
+  isLive: boolean;
+  className?: string;
+}
+
+export default function LiveBadge({ isLive, className = '' }: LiveBadgeProps) {
   if (!isLive) return null;
 
   return (
@@ -17,17 +18,21 @@ const LiveBadge = ({ isLive, className = '' }) => {
       </span>
     </div>
   );
-};
+}
 
-/**
- * Wrapper component that adds live indicator styling to children
- */
-export const LiveIndicatorWrapper = ({
+interface LiveIndicatorWrapperProps {
+  isLive: boolean;
+  children: React.ReactNode;
+  normalBorderClass?: string;
+  className?: string;
+}
+
+export function LiveIndicatorWrapper({
   isLive,
   children,
   normalBorderClass = 'border-yellow-500',
   className = '',
-}) => {
+}: LiveIndicatorWrapperProps) {
   const liveBorderClass = isLive
     ? 'border-red-500 shadow-[0_0_20px_rgba(239,68,68,0.6),0_0_40px_rgba(239,68,68,0.3)]'
     : normalBorderClass;
@@ -40,6 +45,4 @@ export const LiveIndicatorWrapper = ({
       </div>
     </div>
   );
-};
-
-export default LiveBadge;
+}

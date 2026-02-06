@@ -1,9 +1,10 @@
-import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { Particles } from '../Story/Story';
+'use client';
 
-const Servers = () => {
-  const { t } = useTranslation();
+import { useTranslations } from 'next-intl';
+import { Particles } from './Story';
+
+export default function Servers() {
+  const t = useTranslations('servers');
 
   return (
     <div
@@ -15,10 +16,10 @@ const Servers = () => {
         {/* Section Title */}
         <div className='text-center mb-12 md:mb-16'>
           <h2 className='text-4xl md:text-6xl lg:text-7xl text-white mb-4'>
-            {t('servers.title')}
+            {t('title')}
           </h2>
           <p className='text-gray-400 font-[Inter] text-sm md:text-base lg:text-lg max-w-2xl mx-auto'>
-            {t('servers.description')}
+            {t('description')}
           </p>
         </div>
 
@@ -28,7 +29,7 @@ const Servers = () => {
           <div className='group server-card relative overflow-hidden rounded-2xl border-2 border-yellow-500/20 hover:border-yellow-500/60 transition-all duration-500 bg-black/50 backdrop-blur-sm'>
             <div className='relative overflow-hidden'>
               <img
-                src='./serversoi.png'
+                src='/serversoi.png'
                 alt='Server SOI'
                 className='w-full h-48 md:h-64 object-cover group-hover:scale-110 transition-transform duration-700'
                 loading='lazy'
@@ -38,14 +39,14 @@ const Servers = () => {
             </div>
             <div className='p-6 md:p-8'>
               <h3 className='text-2xl md:text-3xl text-yellow-500 mb-2'>
-                {t('servers.soi.name')}
+                {t('soi.name')}
               </h3>
               <p className='text-gray-400 font-[Inter] text-sm md:text-base mb-4'>
-                {t('servers.soi.description')}
+                {t('soi.description')}
               </p>
               <div className='flex items-center gap-2 text-gray-500 font-[Inter] text-sm'>
                 <i className='ri-gamepad-fill text-yellow-500'></i>
-                <span>{t('servers.platform')}</span>
+                <span>{t('platform')}</span>
               </div>
             </div>
             {/* Glow effect on hover */}
@@ -58,7 +59,7 @@ const Servers = () => {
           <div className='group server-card relative overflow-hidden rounded-2xl border-2 border-pink-500/20 hover:border-pink-500/60 transition-all duration-500 bg-black/50 backdrop-blur-sm'>
             <div className='relative overflow-hidden'>
               <img
-                src='./serverime.png'
+                src='/serverime.png'
                 alt='Server IME'
                 className='w-full h-48 md:h-64 object-cover group-hover:scale-110 transition-transform duration-700'
                 loading='lazy'
@@ -68,14 +69,14 @@ const Servers = () => {
             </div>
             <div className='p-6 md:p-8'>
               <h3 className='text-2xl md:text-3xl text-pink-500 mb-2'>
-                {t('servers.ime.name')}
+                {t('ime.name')}
               </h3>
               <p className='text-gray-400 font-[Inter] text-sm md:text-base mb-4'>
-                {t('servers.ime.description')}
+                {t('ime.description')}
               </p>
               <div className='flex items-center gap-2 text-gray-500 font-[Inter] text-sm'>
                 <i className='ri-gamepad-fill text-pink-500'></i>
-                <span>{t('servers.platform')}</span>
+                <span>{t('platform')}</span>
               </div>
             </div>
             {/* Glow effect on hover */}
@@ -87,6 +88,4 @@ const Servers = () => {
       </div>
     </div>
   );
-};
-
-export default Servers;
+}

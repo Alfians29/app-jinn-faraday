@@ -1,8 +1,25 @@
-import React from 'react';
-import { useTranslation } from 'react-i18next';
+'use client';
 
-const Sidebar = ({ menuOpen, setMenuOpen, toggleLanguage, smoothScrollTo }) => {
-  const { t, i18n } = useTranslation();
+import { useTranslations, useLocale } from 'next-intl';
+
+interface SidebarProps {
+  menuOpen: boolean;
+  setMenuOpen: (value: boolean) => void;
+  toggleLanguage: () => void;
+  smoothScrollTo: (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    targetId: string,
+  ) => void;
+}
+
+export default function Sidebar({
+  menuOpen,
+  setMenuOpen,
+  toggleLanguage,
+  smoothScrollTo,
+}: SidebarProps) {
+  const t = useTranslations('nav');
+  const locale = useLocale();
 
   return (
     <>
@@ -32,28 +49,28 @@ const Sidebar = ({ menuOpen, setMenuOpen, toggleLanguage, smoothScrollTo }) => {
             onClick={(e) => smoothScrollTo(e, '#home')}
             className='text-3xl md:text-5xl lg:text-6xl text-white hover:text-yellow-500 transition-colors duration-300 font-bold'
           >
-            {t('nav.home')}
+            {t('home')}
           </a>
           <a
             href='#story'
             onClick={(e) => smoothScrollTo(e, '#story')}
             className='text-3xl md:text-5xl lg:text-6xl text-white hover:text-yellow-500 transition-colors duration-300 font-bold'
           >
-            {t('nav.story')}
+            {t('story')}
           </a>
           <a
             href='#family'
             onClick={(e) => smoothScrollTo(e, '#family')}
             className='text-3xl md:text-5xl lg:text-6xl text-white hover:text-yellow-500 transition-colors duration-300 font-bold'
           >
-            {t('nav.family')}
+            {t('family')}
           </a>
           <a
             href='#servers'
             onClick={(e) => smoothScrollTo(e, '#servers')}
             className='text-3xl md:text-5xl lg:text-6xl text-white hover:text-yellow-500 transition-colors duration-300 font-bold'
           >
-            {t('nav.servers')}
+            {t('servers')}
           </a>
 
           {/* Language Toggle Button */}
@@ -62,12 +79,10 @@ const Sidebar = ({ menuOpen, setMenuOpen, toggleLanguage, smoothScrollTo }) => {
             className='mt-6 md:mt-8 px-6 py-3 bg-yellow-500/20 border border-yellow-500/50 rounded-full hover:bg-yellow-500/30 transition-all duration-300 text-yellow-500 font-bold text-lg flex items-center gap-2'
           >
             <i className='ri-translate-2'></i>
-            {i18n.language === 'en' ? 'Bahasa Indonesia' : 'English'}
+            {locale === 'en' ? 'Bahasa Indonesia' : 'English'}
           </button>
         </div>
       </div>
     </>
   );
-};
-
-export default Sidebar;
+}
