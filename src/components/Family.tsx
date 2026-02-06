@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslation } from 'react-i18next';
 import { Particles } from './Story';
 import { useLiveStatus } from '@/hooks/useLiveStatus';
 import LiveBadge from './LiveBadge';
@@ -16,7 +16,7 @@ export default function Family({
   wifeEasterEgg,
   setWifeEasterEgg,
 }: FamilyProps) {
-  const t = useTranslations('family');
+  const { t } = useTranslation();
 
   // Collect all channel IDs for live status checking
   const allChannelIds = useMemo(() => {
@@ -62,13 +62,13 @@ export default function Family({
           {/* Section Title */}
           <div className='text-center mb-8 md:mb-12 lg:mb-14 xl:mb-16'>
             <h2 className='text-4xl md:text-5xl lg:text-5xl xl:text-5xl 2xl:text-7xl text-white mb-2 md:mb-4'>
-              {t('title1')}
+              {t('family.title1')}
             </h2>
             <h2 className='text-4xl md:text-5xl lg:text-5xl xl:text-5xl 2xl:text-7xl text-yellow-500'>
-              {t('title2')}
+              {t('family.title2')}
             </h2>
             <p className='mt-4 md:mt-6 text-sm md:text-base lg:text-base xl:text-base 2xl:text-xl font-[Inter] text-gray-400 max-w-2xl mx-auto px-4'>
-              {t('description')}
+              {t('family.description')}
             </p>
           </div>
 
@@ -105,7 +105,7 @@ export default function Family({
                     {FAMILY.mainCharacter.name}
                   </h3>
                   <p className='text-sm md:text-base text-yellow-500 font-[Inter]'>
-                    {t('roles.mainCharacter')}
+                    {t('family.roles.mainCharacter')}
                   </p>
                 </div>
               </div>
@@ -155,7 +155,9 @@ export default function Family({
                     {wifeEasterEgg ? EASTER_EGG.wife.name : FAMILY.wife.name}
                   </h3>
                   <p className='text-sm md:text-base text-pink-500 font-[Inter]'>
-                    {wifeEasterEgg ? t('roles.sweetheart') : t('roles.wife')}
+                    {wifeEasterEgg
+                      ? t('family.roles.sweetheart')
+                      : t('family.roles.wife')}
                   </p>
                 </div>
               </div>
@@ -167,7 +169,7 @@ export default function Family({
             {/* Siblings Label */}
             <div className='text-center'>
               <h3 className='text-lg md:text-2xl text-gray-400 font-[Inter]'>
-                {t('roles.siblings')}
+                {t('family.roles.siblings')}
               </h3>
             </div>
 
@@ -200,7 +202,7 @@ export default function Family({
                     {FAMILY.brother.name}
                   </h3>
                   <p className='text-blue-500 font-[Inter] text-[10px] md:text-xs'>
-                    {t('roles.brother')}
+                    {t('family.roles.brother')}
                   </p>
                 </div>
               </div>
@@ -233,7 +235,7 @@ export default function Family({
                       {sister.name}
                     </h3>
                     <p className='text-gray-500 font-[Inter] text-[10px] md:text-xs'>
-                      {t('roles.sister')}
+                      {t('family.roles.sister')}
                     </p>
                   </div>
                 </div>
@@ -269,7 +271,7 @@ export default function Family({
                       {sister.name}
                     </h3>
                     <p className='text-gray-500 font-[Inter] text-[10px] md:text-xs'>
-                      {t('roles.sister')}
+                      {t('family.roles.sister')}
                     </p>
                   </div>
                 </div>
@@ -282,7 +284,7 @@ export default function Family({
             {/* Children Label */}
             <div className='text-center'>
               <h3 className='text-lg md:text-2xl text-gray-400 font-[Inter]'>
-                {t('roles.children')}
+                {t('family.roles.children')}
               </h3>
             </div>
 
@@ -316,7 +318,7 @@ export default function Family({
                       {daughter.name}
                     </h3>
                     <p className='text-pink-400 font-[Inter] text-[10px] md:text-xs'>
-                      {t('roles.daughter')}
+                      {t('family.roles.daughter')}
                     </p>
                   </div>
                 </div>
@@ -349,7 +351,7 @@ export default function Family({
                       {nephew.name}
                     </h3>
                     <p className='text-amber-400 font-[Inter] text-[10px] md:text-xs'>
-                      {t('roles.nephew')}
+                      {t('family.roles.nephew')}
                     </p>
                   </div>
                 </div>
@@ -432,10 +434,12 @@ export default function Family({
               {/* Police tape effect */}
               <div className='absolute -left-10 top-4 w-[120%] h-6 bg-yellow-500 transform -rotate-3 flex items-center justify-center z-10'>
                 <p className='text-black font-bold text-xs tracking-widest whitespace-nowrap'>
-                  | {t('roles.missing')} | {t('roles.missing').toUpperCase()} |{' '}
-                  {t('roles.missing').toUpperCase()} |{' '}
-                  {t('roles.missing').toUpperCase()} |{' '}
-                  {t('roles.missing').toUpperCase()} | {t('roles.missing')} |
+                  | {t('family.roles.missing')} |{' '}
+                  {t('family.roles.missing').toUpperCase()} |{' '}
+                  {t('family.roles.missing').toUpperCase()} |{' '}
+                  {t('family.roles.missing').toUpperCase()} |{' '}
+                  {t('family.roles.missing').toUpperCase()} |{' '}
+                  {t('family.roles.missing')} |
                 </p>
               </div>
 
@@ -478,7 +482,7 @@ export default function Family({
                     {FAMILY.missingPerson.name}
                   </h3>
                   <p className='text-gray-400 font-[Inter] text-sm mt-1'>
-                    {t('roles.father')}
+                    {t('family.roles.father')}
                   </p>
                   <p className='text-red-400/70 font-[Inter] text-xs mt-2 italic'>
                     &quot;Last seen: Unknown&quot;

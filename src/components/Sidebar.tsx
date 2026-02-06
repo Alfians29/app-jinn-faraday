@@ -1,6 +1,6 @@
 'use client';
 
-import { useTranslations, useLocale } from 'next-intl';
+import { useTranslation } from 'react-i18next';
 
 interface SidebarProps {
   menuOpen: boolean;
@@ -18,8 +18,7 @@ export default function Sidebar({
   toggleLanguage,
   smoothScrollTo,
 }: SidebarProps) {
-  const t = useTranslations('nav');
-  const locale = useLocale();
+  const { t, i18n } = useTranslation();
 
   return (
     <>
@@ -49,28 +48,28 @@ export default function Sidebar({
             onClick={(e) => smoothScrollTo(e, '#home')}
             className='text-3xl md:text-5xl lg:text-6xl text-white hover:text-yellow-500 transition-colors duration-300 font-bold'
           >
-            {t('home')}
+            {t('nav.home')}
           </a>
           <a
             href='#story'
             onClick={(e) => smoothScrollTo(e, '#story')}
             className='text-3xl md:text-5xl lg:text-6xl text-white hover:text-yellow-500 transition-colors duration-300 font-bold'
           >
-            {t('story')}
+            {t('nav.story')}
           </a>
           <a
             href='#family'
             onClick={(e) => smoothScrollTo(e, '#family')}
             className='text-3xl md:text-5xl lg:text-6xl text-white hover:text-yellow-500 transition-colors duration-300 font-bold'
           >
-            {t('family')}
+            {t('nav.family')}
           </a>
           <a
             href='#servers'
             onClick={(e) => smoothScrollTo(e, '#servers')}
             className='text-3xl md:text-5xl lg:text-6xl text-white hover:text-yellow-500 transition-colors duration-300 font-bold'
           >
-            {t('servers')}
+            {t('nav.servers')}
           </a>
 
           {/* Language Toggle Button */}
@@ -79,7 +78,7 @@ export default function Sidebar({
             className='mt-6 md:mt-8 px-6 py-3 bg-yellow-500/20 border border-yellow-500/50 rounded-full hover:bg-yellow-500/30 transition-all duration-300 text-yellow-500 font-bold text-lg flex items-center gap-2'
           >
             <i className='ri-translate-2'></i>
-            {locale === 'en' ? 'Bahasa Indonesia' : 'English'}
+            {i18n.language === 'en' ? 'Bahasa Indonesia' : 'English'}
           </button>
         </div>
       </div>

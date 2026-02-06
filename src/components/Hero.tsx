@@ -1,6 +1,6 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useTranslation } from 'react-i18next';
 import Image from 'next/image';
 
 interface HeroProps {
@@ -12,7 +12,7 @@ export default function Hero({
   showChampionPopup,
   setShowChampionPopup,
 }: HeroProps) {
-  const t = useTranslations('hero');
+  const { t } = useTranslation();
 
   return (
     <div
@@ -36,10 +36,10 @@ export default function Hero({
         />
         <div className='text text-white flex flex-col gap-1 md:gap-2 lg:gap-2 xl:gap-3 absolute top-10 md:top-16 lg:top-16 xl:top-20 left-1/2 -translate-x-1/2 scale-[0.5] md:scale-[0.7] lg:scale-[0.9] xl:scale-[1.4] rotate-[-10deg]'>
           <h1 className='text-[4rem] md:text-[6rem] lg:text-[8rem] xl:text-[12rem] leading-none -ml-10 md:-ml-16 lg:-ml-24 xl:-ml-40'>
-            {t('story').toLowerCase()}
+            {t('hero.story').toLowerCase()}
           </h1>
           <h1 className='text-[4rem] md:text-[6rem] lg:text-[8rem] xl:text-[12rem] leading-none'>
-            {t('of').toLowerCase()} jinn
+            {t('hero.of').toLowerCase()} jinn
           </h1>
           <h1 className='text-[4rem] md:text-[6rem] lg:text-[8rem] xl:text-[12rem] leading-none -ml-10 md:-ml-16 lg:-ml-24 xl:-ml-40'>
             faraday
