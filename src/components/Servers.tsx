@@ -1,10 +1,10 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useTranslation } from 'react-i18next';
 import { Particles } from './Story';
 
 export default function Servers() {
-  const t = useTranslations('servers');
+  const { t } = useTranslation();
 
   return (
     <div
@@ -16,10 +16,10 @@ export default function Servers() {
         {/* Section Title */}
         <div className='text-center mb-12 md:mb-16'>
           <h2 className='text-4xl md:text-6xl lg:text-7xl text-white mb-4'>
-            {t('title')}
+            {t('servers.title')}
           </h2>
           <p className='text-gray-400 font-[Inter] text-sm md:text-base lg:text-lg max-w-2xl mx-auto'>
-            {t('description')}
+            {t('servers.description')}
           </p>
         </div>
 
@@ -39,15 +39,24 @@ export default function Servers() {
             </div>
             <div className='p-6 md:p-8'>
               <h3 className='text-2xl md:text-3xl text-yellow-500 mb-2'>
-                {t('soi.name')}
+                {t('servers.soi.name')}
               </h3>
               <p className='text-gray-400 font-[Inter] text-sm md:text-base mb-4'>
-                {t('soi.description')}
+                {t('servers.soi.description')}
               </p>
               <div className='flex items-center gap-2 text-gray-500 font-[Inter] text-sm'>
                 <i className='ri-gamepad-fill text-yellow-500'></i>
-                <span>{t('platform')}</span>
+                <span>{t('servers.platform')}</span>
               </div>
+              <a
+                href='https://stateofindonesia.id/'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='mt-4 inline-flex items-center gap-2 px-4 py-2 bg-yellow-500/20 border border-yellow-500/50 rounded-lg hover:bg-yellow-500/30 transition-all duration-300 text-yellow-500 font-[Inter] text-sm font-medium'
+              >
+                <i className='ri-external-link-line'></i>
+                Visit Website
+              </a>
             </div>
             {/* Glow effect on hover */}
             <div className='absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none'>
@@ -69,15 +78,24 @@ export default function Servers() {
             </div>
             <div className='p-6 md:p-8'>
               <h3 className='text-2xl md:text-3xl text-pink-500 mb-2'>
-                {t('ime.name')}
+                {t('servers.ime.name')}
               </h3>
               <p className='text-gray-400 font-[Inter] text-sm md:text-base mb-4'>
-                {t('ime.description')}
+                {t('servers.ime.description')}
               </p>
               <div className='flex items-center gap-2 text-gray-500 font-[Inter] text-sm'>
                 <i className='ri-gamepad-fill text-pink-500'></i>
-                <span>{t('platform')}</span>
+                <span>{t('servers.platform')}</span>
               </div>
+              <a
+                href='https://imeroleplay.com/'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='mt-4 inline-flex items-center gap-2 px-4 py-2 bg-pink-500/20 border border-pink-500/50 rounded-lg hover:bg-pink-500/30 transition-all duration-300 text-pink-500 font-[Inter] text-sm font-medium'
+              >
+                <i className='ri-external-link-line'></i>
+                Visit Website
+              </a>
             </div>
             {/* Glow effect on hover */}
             <div className='absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none'>

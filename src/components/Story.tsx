@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslation } from 'react-i18next';
 
 // Animated Particles Component
 export function Particles() {
@@ -123,7 +123,7 @@ export default function Story({
   activeCharacter,
   setActiveCharacter,
 }: StoryProps) {
-  const t = useTranslations();
+  const { t } = useTranslation();
 
   return (
     <div

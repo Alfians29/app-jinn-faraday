@@ -4,8 +4,7 @@ import { useState } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useTranslations, useLocale } from 'next-intl';
-import { useRouter, usePathname } from 'next/navigation';
+import { useTranslation } from 'react-i18next';
 
 // Import components
 import Hero from './Hero';
@@ -21,10 +20,7 @@ if (typeof window !== 'undefined') {
 }
 
 export default function HomePage() {
-  const t = useTranslations();
-  const locale = useLocale();
-  const router = useRouter();
-  const pathname = usePathname();
+  const { i18n } = useTranslation();
 
   const [showContent, setShowContent] = useState(false);
   const [activeCharacter, setActiveCharacter] = useState(0);
@@ -33,10 +29,8 @@ export default function HomePage() {
   const [showChampionPopup, setShowChampionPopup] = useState(false);
 
   const toggleLanguage = () => {
-    const newLocale = locale === 'en' ? 'id' : 'en';
-    // Get the path without locale prefix
-    const pathWithoutLocale = pathname.replace(/^\/(en|id)/, '') || '/';
-    router.push(`/${newLocale}${pathWithoutLocale}`);
+    const newLocale = i18n.language === 'en' ? 'id' : 'en';
+    i18n.changeLanguage(newLocale);
   };
 
   const smoothScrollTo = (
