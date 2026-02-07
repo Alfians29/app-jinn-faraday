@@ -11,6 +11,7 @@ import Hero from './Hero';
 import Story from './Story';
 import Family from './Family';
 import Servers from './Servers';
+import Quote from './Quote';
 import Footer from './Footer';
 import Sidebar from './Sidebar';
 
@@ -201,8 +202,14 @@ export default function HomePage() {
         el.classList.add('scroll-animate');
       });
 
+    document.querySelectorAll('#family .family-card').forEach((el) => {
+      el.classList.add('scroll-animate');
+    });
+
     document
-      .querySelectorAll('#extras .extras-card, #extras h3, #extras p')
+      .querySelectorAll(
+        '#quote .quote-mark, #quote .quote-text, #quote .quote-author, #quote .quote-line',
+      )
       .forEach((el) => {
         el.classList.add('scroll-animate');
       });
@@ -210,12 +217,12 @@ export default function HomePage() {
     const storySection = document.querySelector('#story');
     const familySection = document.querySelector('#family');
     const serversSection = document.querySelector('#servers');
-    const extrasSection = document.querySelector('#extras');
+    const quoteSection = document.querySelector('#quote');
 
     if (storySection) observer.observe(storySection);
     if (familySection) observer.observe(familySection);
     if (serversSection) observer.observe(serversSection);
-    if (extrasSection) observer.observe(extrasSection);
+    if (quoteSection) observer.observe(quoteSection);
 
     return () => observer.disconnect();
   }, [showContent]);
@@ -278,6 +285,7 @@ export default function HomePage() {
               setWifeEasterEgg={setWifeEasterEgg}
             />
             <Servers />
+            <Quote />
             <Footer />
           </div>
         </>

@@ -1,100 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-
-// Animated Particles Component
-export function Particles() {
-  const [particles, setParticles] = useState<
-    Array<{
-      id: number;
-      left: number;
-      top: number;
-      size: number;
-      duration: number;
-      delay: number;
-      opacity: number;
-      color: string;
-    }>
-  >([]);
-
-  useEffect(() => {
-    const generateParticles = () => {
-      const newParticles = [];
-      for (let i = 0; i < 25; i++) {
-        newParticles.push({
-          id: i,
-          left: Math.random() * 100,
-          top: Math.random() * 100,
-          size: Math.random() * 4 + 1,
-          duration: Math.random() * 20 + 10,
-          delay: Math.random() * 5,
-          opacity: Math.random() * 0.5 + 0.1,
-          color:
-            Math.random() > 0.7
-              ? 'yellow'
-              : Math.random() > 0.5
-                ? 'orange'
-                : 'white',
-        });
-      }
-      setParticles(newParticles);
-    };
-    generateParticles();
-  }, []);
-
-  return (
-    <div className='absolute inset-0 overflow-hidden pointer-events-none'>
-      {particles.map((particle) => (
-        <div
-          key={particle.id}
-          className='absolute rounded-full animate-float'
-          style={{
-            left: `${particle.left}%`,
-            top: `${particle.top}%`,
-            width: `${particle.size}px`,
-            height: `${particle.size}px`,
-            backgroundColor:
-              particle.color === 'yellow'
-                ? '#EAB308'
-                : particle.color === 'orange'
-                  ? '#F97316'
-                  : 'rgba(255,255,255,0.5)',
-            opacity: particle.opacity,
-            animation: `float ${particle.duration}s ease-in-out infinite`,
-            animationDelay: `${particle.delay}s`,
-            boxShadow:
-              particle.color === 'yellow'
-                ? '0 0 10px #EAB308'
-                : particle.color === 'orange'
-                  ? '0 0 8px #F97316'
-                  : '0 0 5px rgba(255,255,255,0.3)',
-          }}
-        />
-      ))}
-      <style>{`
-        @keyframes float {
-          0%, 100% {
-            transform: translateY(0) translateX(0);
-            opacity: var(--opacity, 0.3);
-          }
-          25% {
-            transform: translateY(-30px) translateX(10px);
-            opacity: calc(var(--opacity, 0.3) * 1.5);
-          }
-          50% {
-            transform: translateY(-15px) translateX(-15px);
-            opacity: var(--opacity, 0.3);
-          }
-          75% {
-            transform: translateY(-40px) translateX(5px);
-            opacity: calc(var(--opacity, 0.3) * 0.8);
-          }
-        }
-      `}</style>
-    </div>
-  );
-}
+import Particles from './Particles';
 
 // Character data for switching
 const CHARACTERS = [
@@ -128,7 +35,7 @@ export default function Story({
   return (
     <div
       id='story'
-      className='w-full min-h-screen flex items-center justify-center bg-black py-10 md:py-20 px-4 md:px-10 lg:px-16 xl:px-24 2xl:px-32 relative'
+      className='w-full min-h-screen flex items-center justify-center bg-black py-12 md:py-16 px-4 md:px-10 lg:px-16 xl:px-24 2xl:px-32 relative'
     >
       <Particles />
       <div className='cntnr flex flex-col lg:flex-row items-center justify-center text-white w-full max-w-[1800px] mx-auto gap-8 lg:gap-16 relative z-10'>
@@ -176,10 +83,10 @@ export default function Story({
             ))}
           </div>
 
-          <h1 className='text-3xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl leading-tight'>
+          <h1 className='text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-6xl leading-tight'>
             {activeCharacter === 0 ? t('soa.title') : t('allstar.title')}
           </h1>
-          <h1 className='text-3xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl leading-tight'>
+          <h1 className='text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-6xl leading-tight'>
             {activeCharacter === 0 ? t('soa.subtitle') : t('allstar.subtitle')}
           </h1>
           <p className='mt-4 md:mt-4 lg:mt-4 xl:mt-5 2xl:mt-6 text-xs md:text-sm lg:text-sm xl:text-base 2xl:text-lg font-[Inter] text-gray-300 leading-relaxed'>
