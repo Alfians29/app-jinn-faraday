@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Particles } from './Story';
+import Particles from './Particles';
 import { useLiveStatus } from '@/hooks/useLiveStatus';
 import LiveBadge from './LiveBadge';
 import { FAMILY, EASTER_EGG } from '@/data/familyData';
@@ -55,7 +55,7 @@ export default function Family({
     <>
       <div
         id='family'
-        className='w-full min-h-screen bg-black py-10 md:py-20 px-4 md:px-10 lg:px-16 xl:px-24 2xl:px-32 relative'
+        className='w-full min-h-screen bg-black py-12 md:py-16 px-4 md:px-10 lg:px-16 xl:px-24 2xl:px-32 relative'
       >
         <Particles />
         <div className='max-w-[1800px] mx-auto relative z-10'>
@@ -73,7 +73,7 @@ export default function Family({
           </div>
 
           {/* Family Tree Grid */}
-          <div className='flex flex-col items-center gap-6 md:gap-10'>
+          <div className='flex flex-col items-center gap-4 md:gap-8'>
             {/* Jinn + Wife Row */}
             <div className='flex flex-row justify-center items-center gap-4 md:gap-12'>
               {/* Jinn - Main Character */}
@@ -174,12 +174,12 @@ export default function Family({
             </div>
 
             {/* Brother + Sisters Row */}
-            <div className='flex justify-center gap-3 md:gap-6 flex-wrap max-w-[700px] items-end'>
+            <div className='flex justify-center gap-3 md:gap-6 flex-wrap max-w-[380px] md:max-w-[700px] items-end mx-auto'>
               {/* Brother */}
               <div className='group relative'>
                 <LiveBadge isLive={isChannelLive(FAMILY.brother.channelId)} />
                 <div
-                  className={`w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-full bg-gradient-to-br from-blue-500/20 to-blue-600/10 border-2 md:border-4 ${getLiveBorderClass(FAMILY.brother.channelId, 'border-blue-500/30 group-hover:border-blue-500')} transition-all duration-300 flex items-center justify-center relative overflow-hidden`}
+                  className={`w-20 h-20 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-full bg-gradient-to-br from-blue-500/20 to-blue-600/10 border-2 md:border-4 ${getLiveBorderClass(FAMILY.brother.channelId, 'border-blue-500/30 group-hover:border-blue-500')} transition-all duration-300 flex items-center justify-center relative overflow-hidden`}
                 >
                   <img
                     src={FAMILY.brother.image}
@@ -212,7 +212,7 @@ export default function Family({
                 <div key={index} className='group relative'>
                   <LiveBadge isLive={isChannelLive(sister.channelId)} />
                   <div
-                    className={`w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-full bg-gradient-to-br from-white/10 to-white/5 border-2 md:border-4 ${getLiveBorderClass(sister.channelId, 'border-white/30 group-hover:border-yellow-500')} transition-all duration-300 flex items-center justify-center relative overflow-hidden`}
+                    className={`w-20 h-20 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-full bg-gradient-to-br from-white/10 to-white/5 border-2 md:border-4 ${getLiveBorderClass(sister.channelId, 'border-white/30 group-hover:border-yellow-500')} transition-all duration-300 flex items-center justify-center relative overflow-hidden`}
                   >
                     <img
                       src={sister.image}
@@ -243,12 +243,12 @@ export default function Family({
             </div>
 
             {/* Sisters Row 2 */}
-            <div className='flex justify-center gap-3 md:gap-6 flex-wrap max-w-[1000px] mt-4'>
+            <div className='flex justify-center gap-3 md:gap-6 flex-wrap max-w-[380px] md:max-w-[1000px] mt-2 md:mt-4 mx-auto'>
               {FAMILY.sisters2.map((sister, index) => (
                 <div key={index} className='group relative'>
                   <LiveBadge isLive={isChannelLive(sister.channelId)} />
                   <div
-                    className={`w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-full bg-gradient-to-br from-white/10 to-white/5 border-2 md:border-4 ${getLiveBorderClass(sister.channelId, 'border-white/30 group-hover:border-yellow-500')} transition-all duration-300 flex items-center justify-center relative overflow-hidden`}
+                    className={`w-20 h-20 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-full bg-gradient-to-br from-white/10 to-white/5 border-2 md:border-4 ${getLiveBorderClass(sister.channelId, 'border-white/30 group-hover:border-yellow-500')} transition-all duration-300 flex items-center justify-center relative overflow-hidden`}
                   >
                     <img
                       src={sister.image}
@@ -289,7 +289,7 @@ export default function Family({
             </div>
 
             {/* Children Row (Daughters + Nephew) */}
-            <div className='flex justify-center gap-4 md:gap-8 flex-wrap'>
+            <div className='flex justify-center gap-4 md:gap-8 flex-wrap max-w-[380px] md:max-w-none mx-auto'>
               {/* Daughters */}
               {FAMILY.daughters.map((daughter, index) => (
                 <div key={`daughter-${index}`} className='group relative'>
@@ -357,136 +357,136 @@ export default function Family({
                 </div>
               ))}
             </div>
-          </div>
-        </div>
-      </div>
 
-      {/* Missing Person & Bodyguard Section */}
-      <div id='extras' className='w-full bg-black py-8 md:py-12 px-4 md:px-10'>
-        <div className='max-w-[900px] mx-auto flex flex-col md:flex-row gap-6 justify-center'>
-          {/* Bodyguard Card */}
-          <div className='flex-1 max-w-[400px] extras-card'>
-            <div className='bg-gradient-to-b from-green-950/30 to-black border-2 border-green-500/50 rounded-lg p-4 md:p-6 relative overflow-hidden h-full'>
-              {/* Shield banner */}
-              <div className='absolute -left-10 top-4 w-[120%] h-6 bg-green-600 transform -rotate-3 flex items-center justify-center z-10'>
-                <p className='text-white font-bold text-xs tracking-widest whitespace-nowrap'>
-                  | {t('roles.bodyguard').toUpperCase()} |{' '}
-                  {t('roles.bodyguard').toUpperCase()} |{' '}
-                  {t('roles.bodyguard').toUpperCase()} |{' '}
-                  {t('roles.bodyguard').toUpperCase()} |{' '}
-                  {t('roles.bodyguard').toUpperCase()} |{' '}
-                  {t('roles.bodyguard').toUpperCase()} |
-                </p>
-              </div>
-
-              <div className='mt-8 flex flex-col items-center'>
-                {/* Photo placeholder */}
-                <div className='group relative'>
-                  {/* Live Badge for rectangular card */}
-                  {isChannelLive(FAMILY.bodyguard.channelId) && (
-                    <div className='absolute -top-2 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1 bg-red-600 px-2 py-0.5 rounded-full shadow-lg animate-pulse'>
-                      <span className='w-2 h-2 bg-white rounded-full animate-ping'></span>
-                      <span className='text-white text-[10px] md:text-xs font-bold uppercase tracking-wider'>
-                        LIVE
-                      </span>
+            {/* Missing Person & Bodyguard Section */}
+            <div className='w-full pt-8 md:pt-12'>
+              <div className='max-w-[900px] mx-auto flex flex-col md:flex-row gap-6 justify-center'>
+                {/* Bodyguard Card */}
+                <div className='flex-1 max-w-[400px] family-card'>
+                  <div className='bg-gradient-to-b from-green-950/30 to-black border-2 border-green-500/50 rounded-lg p-4 md:p-6 relative overflow-hidden h-full'>
+                    {/* Shield banner */}
+                    <div className='absolute -left-10 top-4 w-[120%] h-6 bg-green-600 transform -rotate-3 flex items-center justify-center z-10'>
+                      <p className='text-white font-bold text-xs tracking-widest whitespace-nowrap'>
+                        | {t('family.roles.bodyguard').toUpperCase()} |{' '}
+                        {t('family.roles.bodyguard').toUpperCase()} |{' '}
+                        {t('family.roles.bodyguard').toUpperCase()} |{' '}
+                        {t('family.roles.bodyguard').toUpperCase()} |{' '}
+                        {t('family.roles.bodyguard').toUpperCase()} |{' '}
+                        {t('family.roles.bodyguard').toUpperCase()} |
+                      </p>
                     </div>
-                  )}
-                  <div
-                    className={`w-24 h-24 md:w-28 md:h-28 rounded-lg bg-gradient-to-br from-green-900/50 to-green-950 border-4 ${isChannelLive(FAMILY.bodyguard.channelId) ? 'border-red-500 shadow-[0_0_20px_rgba(239,68,68,0.6),0_0_40px_rgba(239,68,68,0.3)] animate-pulse' : 'border-green-600/50'} flex items-center justify-center relative overflow-hidden transition-all duration-300`}
-                  >
-                    <img
-                      src={FAMILY.bodyguard.image}
-                      alt={FAMILY.bodyguard.name}
-                      className='w-full h-full object-cover'
-                    />
-                    {FAMILY.bodyguard.youtube && (
-                      <a
-                        href={FAMILY.bodyguard.youtube}
-                        target='_blank'
-                        rel='noopener noreferrer'
-                        className='absolute inset-0 bg-black/70 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center'
-                      >
-                        <i className='ri-youtube-fill text-2xl md:text-4xl text-red-500 hover:scale-125 transition-transform'></i>
-                      </a>
-                    )}
+
+                    <div className='mt-8 flex flex-col items-center'>
+                      {/* Photo placeholder */}
+                      <div className='group relative'>
+                        {/* Live Badge for rectangular card */}
+                        {isChannelLive(FAMILY.bodyguard.channelId) && (
+                          <div className='absolute -top-2 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1 bg-red-600 px-2 py-0.5 rounded-full shadow-lg animate-pulse'>
+                            <span className='w-2 h-2 bg-white rounded-full animate-ping'></span>
+                            <span className='text-white text-[10px] md:text-xs font-bold uppercase tracking-wider'>
+                              LIVE
+                            </span>
+                          </div>
+                        )}
+                        <div
+                          className={`w-24 h-24 md:w-28 md:h-28 rounded-lg bg-gradient-to-br from-green-900/50 to-green-950 border-4 ${isChannelLive(FAMILY.bodyguard.channelId) ? 'border-red-500 shadow-[0_0_20px_rgba(239,68,68,0.6),0_0_40px_rgba(239,68,68,0.3)] animate-pulse' : 'border-green-600/50 group-hover:border-green-500 group-hover:shadow-[0_0_20px_rgba(34,197,94,0.4)]'} flex items-center justify-center relative overflow-hidden transition-all duration-300`}
+                        >
+                          <img
+                            src={FAMILY.bodyguard.image}
+                            alt={FAMILY.bodyguard.name}
+                            className='w-full h-full object-cover'
+                          />
+                          {FAMILY.bodyguard.youtube && (
+                            <a
+                              href={FAMILY.bodyguard.youtube}
+                              target='_blank'
+                              rel='noopener noreferrer'
+                              className='absolute inset-0 bg-black/70 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center'
+                            >
+                              <i className='ri-youtube-fill text-2xl md:text-4xl text-red-500 hover:scale-125 transition-transform'></i>
+                            </a>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Name and details */}
+                      <div className='text-center mt-4'>
+                        <h3 className='text-xl md:text-2xl text-green-500 font-bold font-[Inter]'>
+                          {FAMILY.bodyguard.name}
+                        </h3>
+                        <p className='text-gray-400 font-[Inter] text-sm mt-1'>
+                          {t('family.roles.bodyguard')}
+                        </p>
+                        <p className='text-green-400/70 font-[Inter] text-xs mt-2 italic'>
+                          &quot;Always on duty&quot;
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                {/* Name and details */}
-                <div className='text-center mt-4'>
-                  <h3 className='text-xl md:text-2xl text-green-500 font-bold font-[Inter]'>
-                    {FAMILY.bodyguard.name}
-                  </h3>
-                  <p className='text-gray-400 font-[Inter] text-sm mt-1'>
-                    {t('roles.bodyguard')}
-                  </p>
-                  <p className='text-green-400/70 font-[Inter] text-xs mt-2 italic'>
-                    &quot;Always on duty&quot;
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Missing Person Card */}
-          <div className='flex-1 max-w-[400px] extras-card'>
-            <div className='bg-gradient-to-b from-red-950/30 to-black border-2 border-red-500/50 rounded-lg p-4 md:p-6 relative overflow-hidden h-full'>
-              {/* Police tape effect */}
-              <div className='absolute -left-10 top-4 w-[120%] h-6 bg-yellow-500 transform -rotate-3 flex items-center justify-center z-10'>
-                <p className='text-black font-bold text-xs tracking-widest whitespace-nowrap'>
-                  | {t('family.roles.missing')} |{' '}
-                  {t('family.roles.missing').toUpperCase()} |{' '}
-                  {t('family.roles.missing').toUpperCase()} |{' '}
-                  {t('family.roles.missing').toUpperCase()} |{' '}
-                  {t('family.roles.missing').toUpperCase()} |{' '}
-                  {t('family.roles.missing')} |
-                </p>
-              </div>
-
-              <div className='mt-8 flex flex-col items-center'>
-                {/* Photo placeholder */}
-                <div className='group relative'>
-                  {/* Live Badge for rectangular card */}
-                  {isChannelLive(FAMILY.missingPerson.channelId) && (
-                    <div className='absolute -top-2 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1 bg-red-600 px-2 py-0.5 rounded-full shadow-lg animate-pulse'>
-                      <span className='w-2 h-2 bg-white rounded-full animate-ping'></span>
-                      <span className='text-white text-[10px] md:text-xs font-bold uppercase tracking-wider'>
-                        LIVE
-                      </span>
+                {/* Missing Person Card */}
+                <div className='flex-1 max-w-[400px] family-card'>
+                  <div className='bg-gradient-to-b from-red-950/30 to-black border-2 border-red-500/50 rounded-lg p-4 md:p-6 relative overflow-hidden h-full'>
+                    {/* Police tape effect */}
+                    <div className='absolute -left-10 top-4 w-[120%] h-6 bg-yellow-500 transform -rotate-3 flex items-center justify-center z-10'>
+                      <p className='text-black font-bold text-xs tracking-widest whitespace-nowrap'>
+                        | {t('family.roles.missing')} |{' '}
+                        {t('family.roles.missing').toUpperCase()} |{' '}
+                        {t('family.roles.missing').toUpperCase()} |{' '}
+                        {t('family.roles.missing').toUpperCase()} |{' '}
+                        {t('family.roles.missing').toUpperCase()} |{' '}
+                        {t('family.roles.missing')} |
+                      </p>
                     </div>
-                  )}
-                  <div
-                    className={`w-24 h-24 md:w-28 md:h-28 rounded-lg bg-gradient-to-br from-red-900/50 to-red-950 border-4 ${isChannelLive(FAMILY.missingPerson.channelId) ? 'border-red-500 shadow-[0_0_20px_rgba(239,68,68,0.6),0_0_40px_rgba(239,68,68,0.3)] animate-pulse' : 'border-red-600/50'} flex items-center justify-center relative overflow-hidden transition-all duration-300`}
-                  >
-                    <img
-                      src={FAMILY.missingPerson.image}
-                      alt={FAMILY.missingPerson.name}
-                      className='w-full h-full object-cover'
-                    />
-                    {FAMILY.missingPerson.youtube && (
-                      <a
-                        href={FAMILY.missingPerson.youtube}
-                        target='_blank'
-                        rel='noopener noreferrer'
-                        className='absolute inset-0 bg-black/70 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center'
-                      >
-                        <i className='ri-youtube-fill text-2xl md:text-4xl text-red-500 hover:scale-125 transition-transform'></i>
-                      </a>
-                    )}
-                  </div>
-                </div>
 
-                {/* Name and details */}
-                <div className='text-center mt-4'>
-                  <h3 className='text-xl md:text-2xl text-red-500 font-bold font-[Inter]'>
-                    {FAMILY.missingPerson.name}
-                  </h3>
-                  <p className='text-gray-400 font-[Inter] text-sm mt-1'>
-                    {t('family.roles.father')}
-                  </p>
-                  <p className='text-red-400/70 font-[Inter] text-xs mt-2 italic'>
-                    &quot;Last seen: Unknown&quot;
-                  </p>
+                    <div className='mt-8 flex flex-col items-center'>
+                      {/* Photo placeholder */}
+                      <div className='group relative'>
+                        {/* Live Badge for rectangular card */}
+                        {isChannelLive(FAMILY.missingPerson.channelId) && (
+                          <div className='absolute -top-2 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1 bg-red-600 px-2 py-0.5 rounded-full shadow-lg animate-pulse'>
+                            <span className='w-2 h-2 bg-white rounded-full animate-ping'></span>
+                            <span className='text-white text-[10px] md:text-xs font-bold uppercase tracking-wider'>
+                              LIVE
+                            </span>
+                          </div>
+                        )}
+                        <div
+                          className={`w-24 h-24 md:w-28 md:h-28 rounded-lg bg-gradient-to-br from-red-900/50 to-red-950 border-4 ${isChannelLive(FAMILY.missingPerson.channelId) ? 'border-red-500 shadow-[0_0_20px_rgba(239,68,68,0.6),0_0_40px_rgba(239,68,68,0.3)] animate-pulse' : 'border-red-600/50 group-hover:border-red-500 group-hover:shadow-[0_0_20px_rgba(239,68,68,0.4)]'} flex items-center justify-center relative overflow-hidden transition-all duration-300`}
+                        >
+                          <img
+                            src={FAMILY.missingPerson.image}
+                            alt={FAMILY.missingPerson.name}
+                            className='w-full h-full object-cover'
+                          />
+                          {FAMILY.missingPerson.youtube && (
+                            <a
+                              href={FAMILY.missingPerson.youtube}
+                              target='_blank'
+                              rel='noopener noreferrer'
+                              className='absolute inset-0 bg-black/70 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center'
+                            >
+                              <i className='ri-youtube-fill text-2xl md:text-4xl text-red-500 hover:scale-125 transition-transform'></i>
+                            </a>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Name and details */}
+                      <div className='text-center mt-4'>
+                        <h3 className='text-xl md:text-2xl text-red-500 font-bold font-[Inter]'>
+                          {FAMILY.missingPerson.name}
+                        </h3>
+                        <p className='text-gray-400 font-[Inter] text-sm mt-1'>
+                          {t('family.roles.father')}
+                        </p>
+                        <p className='text-red-400/70 font-[Inter] text-xs mt-2 italic'>
+                          &quot;Last seen: Unknown&quot;
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

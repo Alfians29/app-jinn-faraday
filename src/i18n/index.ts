@@ -78,6 +78,11 @@ const resources = {
             'The server where Jinn continues his story with ALLSTAR car club, dominating the northern streets with style and power.',
         },
       },
+      // Quote Section
+      quote: {
+        text: 'Everyone loves war, but not everyone accepts defeat!',
+        author: 'Jinn Faraday',
+      },
       // Footer
       footer: {
         disclaimer:
@@ -163,6 +168,11 @@ const resources = {
           description:
             'Server tempat Jinn melanjutkan ceritanya bersama klub mobil ALLSTAR, mendominasi jalanan utara dengan gaya dan kekuatan.',
         },
+      },
+      // Quote Section
+      quote: {
+        text: 'Semua orang suka perang, tapi ga semua orang menerima kekalahan!',
+        author: 'Jinn Faraday',
       },
       // Footer
       footer: {

@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslation } from 'react-i18next';
-import { Particles } from './Story';
+import Particles from './Particles';
 
 export default function Servers() {
   const { t } = useTranslation();
@@ -9,16 +9,16 @@ export default function Servers() {
   return (
     <div
       id='servers'
-      className='w-full min-h-screen flex flex-col items-center justify-center bg-black py-16 md:py-24 px-4 md:px-10 relative'
+      className='w-full min-h-screen flex flex-col items-center justify-center bg-black py-12 md:py-16 px-4 md:px-10 relative'
     >
       <Particles />
       <div className='max-w-[1400px] mx-auto w-full relative z-10'>
         {/* Section Title */}
         <div className='text-center mb-12 md:mb-16'>
-          <h2 className='text-4xl md:text-6xl lg:text-7xl text-white mb-4'>
+          <h2 className='text-4xl md:text-5xl lg:text-5xl xl:text-5xl 2xl:text-7xl text-white mb-4'>
             {t('servers.title')}
           </h2>
-          <p className='text-gray-400 font-[Inter] text-sm md:text-base lg:text-lg max-w-2xl mx-auto'>
+          <p className='text-gray-400 font-[Inter] text-sm md:text-base lg:text-base xl:text-base 2xl:text-lg max-w-2xl mx-auto'>
             {t('servers.description')}
           </p>
         </div>

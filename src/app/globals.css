@@ -153,21 +153,66 @@ html {
 #servers .server-card:last-child {
   transition-delay: 0.25s;
 }
-
-/* Extras section animation (Missing Person & Bodyguard) */
-#extras .extras-card.scroll-animate {
+/* Family section card animation (Bodyguard & Missing Person) */
+#family .family-card.scroll-animate {
   transform: translateY(50px) scale(0.95);
+  opacity: 0;
 }
 
-#extras .extras-card.scroll-animate.animate-in {
+#family .family-card.scroll-animate.animate-in {
   transform: translateY(0) scale(1);
+  opacity: 1;
 }
 
-/* Stagger delay for extras cards */
-#extras .extras-card:first-child {
+/* Stagger delay for family cards */
+#family .family-card:first-child {
   transition-delay: 0.1s;
 }
 
-#extras .extras-card:last-child {
+#family .family-card:last-child {
   transition-delay: 0.25s;
+}
+
+/* Quote section animation */
+#quote .quote-mark.scroll-animate {
+  transform: translateY(20px);
+  opacity: 0;
+}
+
+#quote .quote-mark.scroll-animate.animate-in {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+#quote .quote-text.scroll-animate {
+  transform: translateY(30px);
+  opacity: 0;
+  transition-delay: 0.1s;
+}
+
+#quote .quote-text.scroll-animate.animate-in {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+#quote .quote-author.scroll-animate {
+  transform: translateY(20px);
+  opacity: 0;
+  transition-delay: 0.2s;
+}
+
+#quote .quote-author.scroll-animate.animate-in {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+#quote .quote-line.scroll-animate {
+  transform: scaleX(0);
+  opacity: 0;
+  transition-delay: 0.3s;
+}
+
+#quote .quote-line.scroll-animate.animate-in {
+  transform: scaleX(1);
+  opacity: 1;
 }
