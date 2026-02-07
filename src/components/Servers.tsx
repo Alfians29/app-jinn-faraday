@@ -9,7 +9,7 @@ export default function Servers() {
   return (
     <div
       id='servers'
-      className='w-full min-h-screen flex flex-col items-center justify-center bg-black py-12 md:py-16 px-4 md:px-10 relative'
+      className='w-full min-h-screen flex flex-col items-center justify-center bg-black py-10 md:py-16 px-4 md:px-10 relative'
     >
       <Particles />
       <div className='max-w-[1400px] mx-auto w-full relative z-10'>

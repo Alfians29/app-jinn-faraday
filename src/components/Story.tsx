@@ -35,7 +35,7 @@ export default function Story({
   return (
     <div
       id='story'
-      className='w-full min-h-screen flex items-center justify-center bg-black py-12 md:py-16 px-4 md:px-10 lg:px-16 xl:px-24 2xl:px-32 relative'
+      className='w-full min-h-screen flex items-center justify-center bg-black py-10 md:py-16 px-4 md:px-10 lg:px-16 xl:px-24 2xl:px-32 relative'
     >
       <Particles />
       <div className='cntnr flex flex-col lg:flex-row items-center justify-center text-white w-full max-w-[1800px] mx-auto gap-8 lg:gap-16 relative z-10'>

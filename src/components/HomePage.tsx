@@ -284,8 +284,8 @@ export default function HomePage() {
               wifeEasterEgg={wifeEasterEgg}
               setWifeEasterEgg={setWifeEasterEgg}
             />
-            <Servers />
             <Quote />
+            <Servers />
             <Footer />
           </div>
         </>
