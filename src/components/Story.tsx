@@ -39,7 +39,7 @@ export default function Story({
     >
       <Particles />
       <div className='cntnr flex flex-col lg:flex-row items-center justify-center text-white w-full max-w-[1800px] mx-auto gap-8 lg:gap-16 relative z-10'>
-        {/* Character Switch Buttons - Shows first on mobile */}
+        {/* Character Switch Button - Shows first on mobile */}
         <div className='order-1 lg:order-none lg:hidden flex justify-center gap-2 md:gap-4'>
           {CHARACTERS.map((char, index) => (
             <button
