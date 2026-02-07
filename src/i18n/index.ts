@@ -80,7 +80,7 @@ const resources = {
       },
       // Quote Section
       quote: {
-        text: 'Everyone loves war, but not everyone accepts defeat!',
+        text: 'Everyone loves war, but not everyone can accept defeat.',
         author: 'Jinn Faraday',
       },
       // Footer
@@ -171,7 +171,7 @@ const resources = {
       },
       // Quote Section
       quote: {
-        text: 'Semua orang suka perang, tapi ga semua orang menerima kekalahan!',
+        text: 'Semua orang suka perang, tapi tidak semua orang bisa menerima kekalahan.',
         author: 'Jinn Faraday',
       },
       // Footer

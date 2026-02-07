@@ -1,7 +1,6 @@
 'use client';
 
 import { useTranslation } from 'react-i18next';
-import Particles from './Particles';
 
 export default function Quote() {
   const { t } = useTranslation();
@@ -9,9 +8,21 @@ export default function Quote() {
   return (
     <div
       id='quote'
-      className='w-full bg-black pt-0 pb-16 md:pb-24 px-4 md:px-10 relative overflow-hidden'
+      className='w-full min-h-[70vh] flex items-center justify-center bg-black py-0 px-4 md:px-10 relative overflow-hidden'
     >
-      <Particles />
+      {/* Background Image */}
+      <img
+        src='/quotes.png'
+        alt=''
+        className='absolute inset-0 w-full h-full object-cover opacity-60'
+        loading='lazy'
+        decoding='async'
+      />
+      {/* Edge Smoothing Gradients */}
+      <div className='absolute inset-0 bg-linear-to-b from-black via-transparent to-black opacity-100'></div>
+      <div className='absolute inset-x-0 top-0 h-32 bg-linear-to-b from-black to-transparent'></div>
+      <div className='absolute inset-x-0 bottom-0 h-32 bg-linear-to-t from-black to-transparent'></div>
+
       <div className='max-w-[1200px] mx-auto relative z-10 flex flex-col items-center justify-center text-center'>
         {/* Quote Mark */}
         <div className='quote-mark text-yellow-500/20 text-[100px] md:text-[150px] leading-none font-serif mb-[-40px] md:mb-[-60px]'>

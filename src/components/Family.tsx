@@ -55,7 +55,7 @@ export default function Family({
     <>
       <div
         id='family'
-        className='w-full min-h-screen bg-black py-12 md:py-16 px-4 md:px-10 lg:px-16 xl:px-24 2xl:px-32 relative'
+        className='w-full min-h-screen bg-black py-10 md:py-16 px-4 md:px-10 lg:px-16 xl:px-24 2xl:px-32 relative'
       >
         <Particles />
         <div className='max-w-[1800px] mx-auto relative z-10'>
