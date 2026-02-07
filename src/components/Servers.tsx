@@ -25,8 +25,13 @@ export default function Servers() {
 
         {/* Server Cards */}
         <div className='grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12'>
-          {/* Server SOI */}
-          <div className='group server-card relative overflow-hidden rounded-2xl border-2 border-yellow-500/20 hover:border-yellow-500/60 transition-all duration-500 bg-black/50 backdrop-blur-sm'>
+          {/* Server SOI - Clickable Card */}
+          <a
+            href='https://stateofindonesia.id/'
+            target='_blank'
+            rel='noopener noreferrer'
+            className='group server-card relative overflow-hidden rounded-2xl border-2 border-yellow-500/20 hover:border-yellow-500/60 transition-all duration-500 bg-black/50 backdrop-blur-sm cursor-pointer block'
+          >
             <div className='relative overflow-hidden'>
               <img
                 src='/serversoi.png'
@@ -44,28 +49,27 @@ export default function Servers() {
               <p className='text-gray-400 font-[Inter] text-sm md:text-base mb-4'>
                 {t('servers.soi.description')}
               </p>
-              <div className='flex items-center gap-2 text-gray-500 font-[Inter] text-sm'>
-                <i className='ri-gamepad-fill text-yellow-500'></i>
-                <span>{t('servers.platform')}</span>
+              <div className='flex items-center justify-between'>
+                <div className='flex items-center gap-2 text-gray-500 font-[Inter] text-sm'>
+                  <i className='ri-gamepad-fill text-yellow-500'></i>
+                  <span>{t('servers.platform')}</span>
+                </div>
+                <i className='ri-external-link-line text-yellow-500 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300'></i>
               </div>
-              <a
-                href='https://stateofindonesia.id/'
-                target='_blank'
-                rel='noopener noreferrer'
-                className='mt-4 inline-flex items-center gap-2 px-4 py-2 bg-yellow-500/20 border border-yellow-500/50 rounded-lg hover:bg-yellow-500/30 transition-all duration-300 text-yellow-500 font-[Inter] text-sm font-medium'
-              >
-                <i className='ri-external-link-line'></i>
-                Visit Website
-              </a>
             </div>
             {/* Glow effect on hover */}
             <div className='absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none'>
               <div className='absolute inset-0 bg-gradient-to-r from-yellow-500/10 to-orange-500/10'></div>
             </div>
-          </div>
+          </a>
 
-          {/* Server IME */}
-          <div className='group server-card relative overflow-hidden rounded-2xl border-2 border-pink-500/20 hover:border-pink-500/60 transition-all duration-500 bg-black/50 backdrop-blur-sm'>
+          {/* Server IME - Clickable Card */}
+          <a
+            href='https://imeroleplay.com/'
+            target='_blank'
+            rel='noopener noreferrer'
+            className='group server-card relative overflow-hidden rounded-2xl border-2 border-pink-500/20 hover:border-pink-500/60 transition-all duration-500 bg-black/50 backdrop-blur-sm cursor-pointer block'
+          >
             <div className='relative overflow-hidden'>
               <img
                 src='/serverime.png'
@@ -83,25 +87,19 @@ export default function Servers() {
               <p className='text-gray-400 font-[Inter] text-sm md:text-base mb-4'>
                 {t('servers.ime.description')}
               </p>
-              <div className='flex items-center gap-2 text-gray-500 font-[Inter] text-sm'>
-                <i className='ri-gamepad-fill text-pink-500'></i>
-                <span>{t('servers.platform')}</span>
+              <div className='flex items-center justify-between'>
+                <div className='flex items-center gap-2 text-gray-500 font-[Inter] text-sm'>
+                  <i className='ri-gamepad-fill text-pink-500'></i>
+                  <span>{t('servers.platform')}</span>
+                </div>
+                <i className='ri-external-link-line text-pink-500 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300'></i>
               </div>
-              <a
-                href='https://imeroleplay.com/'
-                target='_blank'
-                rel='noopener noreferrer'
-                className='mt-4 inline-flex items-center gap-2 px-4 py-2 bg-pink-500/20 border border-pink-500/50 rounded-lg hover:bg-pink-500/30 transition-all duration-300 text-pink-500 font-[Inter] text-sm font-medium'
-              >
-                <i className='ri-external-link-line'></i>
-                Visit Website
-              </a>
             </div>
             {/* Glow effect on hover */}
             <div className='absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none'>
               <div className='absolute inset-0 bg-gradient-to-r from-pink-500/10 to-purple-500/10'></div>
             </div>
-          </div>
+          </a>
         </div>
       </div>
     </div>
